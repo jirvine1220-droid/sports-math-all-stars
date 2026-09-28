@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<title>Sports Math All-Stars</title>
+<meta name="description" content="A K-6 sports math game: boogie boarding, surfing, Dodgers baseball, Mammoth Mountain skiing and USC Trojans football.">
+<meta name="theme-color" content="#005A9C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Math All-Stars">
+<meta name="format-detection" content="telephone=no">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23005A9C'/%3E%3Cpath d='M50 12l10.6 23.4 25.4 2.6-19 17.2 5.4 25L50 67.4 27.6 80.2l5.4-25-19-17.2 25.4-2.6z' fill='%23FFCC00' stroke='%23990000' stroke-width='4' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" id="appleIcon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23005A9C'/%3E%3C/svg%3E">
+<link rel="manifest" id="manifestLink" href="data:application/manifest+json,%7B%22name%22%3A%22Sports%20Math%20All-Stars%22%2C%22short_name%22%3A%22Math%20All-Stars%22%2C%22display%22%3A%22fullscreen%22%2C%22orientation%22%3A%22any%22%2C%22background_color%22%3A%22%23005A9C%22%2C%22theme_color%22%3A%22%23005A9C%22%7D">
+<style>
+:root{
+  --cardinal:#990000; --gold:#FFCC00; --dodger:#005A9C;
+  --ink:#1d2a44; --good:#1FAF5A; --bad:#FF7A45;
+  --font:"Arial Rounded MT Bold","Nunito","Varela Round","Quicksand",ui-rounded,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --st:env(safe-area-inset-top,0px); --sb:env(safe-area-inset-bottom,0px);
+  --sl:env(safe-area-inset-left,0px); --sr:env(safe-area-inset-right,0px);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#0b4f8a;overscroll-behavior:none}
+body{font-family:var(--font);font-size:22px;font-weight:700;color:var(--ink);
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
+button{font-family:inherit;font-weight:800;touch-action:manipulation;cursor:pointer;border:0;color:inherit;-webkit-tap-highlight-color:transparent}
+input{font-family:inherit;-webkit-user-select:text;user-select:text}
+#app{position:fixed;inset:0;height:100%;height:100dvh;overflow:hidden}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;
+  padding:calc(var(--st) + 10px) calc(var(--sr) + 14px) calc(var(--sb) + 10px) calc(var(--sl) + 14px)}
+.screen.active{display:flex}
+.round-btn{width:68px;height:68px;min-width:68px;border-radius:50%;background:#fff;font-size:32px;display:grid;place-items:center;
+  box-shadow:0 5px 0 rgba(0,0,0,.18),0 8px 18px rgba(0,0,0,.15);transition:transform .08s}
+.round-btn:active{transform:translateY(3px) scale(.96);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+
+/* ---------- HOME ---------- */
+#home{background:
+  radial-gradient(circle at 12% 10%,rgba(255,255,255,.35) 0 60px,transparent 61px),
+  radial-gradient(circle at 88% 18%,rgba(255,255,255,.18) 0 90px,transparent 91px),
+  linear-gradient(180deg,#38B6FF 0%,#1E90E8 45%,#0A5FB0 100%)}
+.home-head{display:flex;align-items:center;gap:14px;flex:0 0 auto}
+.logo{width:84px;height:84px;flex:0 0 auto;filter:drop-shadow(0 6px 0 rgba(0,0,0,.18))}
+.titles{flex:1;min-width:0}
+.title{margin:0;font-size:clamp(34px,5.2vw,62px);line-height:1;font-weight:900;color:#fff;letter-spacing:.5px;
+  text-shadow:0 4px 0 var(--cardinal),0 7px 0 rgba(0,0,0,.25)}
+.title .gold{color:var(--gold)}
+.subtitle{margin-top:8px;color:#fff;font-size:clamp(20px,2.4vw,26px);opacity:.95;text-shadow:0 2px 0 rgba(0,0,0,.2)}
+.head-btns{display:flex;gap:12px}
+.grid{flex:1;min-height:0;margin-top:14px;display:grid;gap:16px;
+  grid-template-columns:repeat(4,1fr);grid-auto-rows:1fr;overflow-y:auto;padding:4px 4px 10px;-webkit-overflow-scrolling:touch}
+@media (orientation:portrait){ .grid{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:560px){ .grid{grid-template-columns:1fr;grid-auto-rows:minmax(220px,auto)} }
+.card{position:relative;display:flex;flex-direction:column;border-radius:26px;overflow:hidden;background:#fff;text-align:left;padding:0;min-height:200px;
+  box-shadow:0 7px 0 rgba(0,0,0,.2),0 12px 24px rgba(0,0,0,.18);transition:transform .1s;border:4px solid #fff}
+.card:active{transform:translateY(4px) scale(.98);box-shadow:0 3px 0 rgba(0,0,0,.2)}
+.card .thumb{flex:1 1 55%;min-height:90px;position:relative;overflow:hidden;background:#9fd8ff}
+.card .thumb svg{position:absolute;inset:0;width:100%;height:100%}
+.card .info{flex:0 0 auto;padding:10px 14px 12px;display:flex;flex-direction:column;gap:3px}
+.pill{position:absolute;top:10px;left:10px;z-index:2;padding:6px 14px;border-radius:999px;font-size:21px;font-weight:900;color:#fff;box-shadow:0 3px 0 rgba(0,0,0,.2);border:2px solid #fff}
+.card .wname{font-size:clamp(20px,2.1vw,25px);line-height:1.1;font-weight:900}
+.card .sport{font-size:18px;opacity:.75;font-weight:800}
+.stars{font-size:28px;letter-spacing:2px;line-height:1}
+.stars .on{color:#FFB800;text-shadow:0 2px 0 #c77f00}
+.stars .off{color:#d6dde8}
+.card.player{background:linear-gradient(160deg,var(--cardinal),#5e0000);color:#fff;align-items:center;justify-content:center;text-align:center;gap:6px;padding:14px;border-color:var(--gold)}
+.card.player .big{font-size:54px;line-height:1}
+.card.player .pname{font-size:26px;color:var(--gold)}
+.card.player small{font-size:19px;opacity:.9}
+.foot-note{flex:0 0 auto;text-align:center;color:#eaf6ff;font-size:18px;margin-top:4px}
+
+/* ---------- GAME ---------- */
+#game{background:linear-gradient(180deg,#dff3ff,#bfe6ff);gap:10px}
+.topbar{display:flex;align-items:center;gap:12px;flex:0 0 auto}
+.gtitle{flex:1;min-width:0;line-height:1.1}
+.gtitle .w{font-size:clamp(22px,2.6vw,30px);font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gtitle .g{font-size:18px;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:46%}
+.dot{width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.12);border:3px solid rgba(255,255,255,.9);box-shadow:0 2px 0 rgba(0,0,0,.12)}
+.dot.cur{background:#fff;transform:scale(1.2);box-shadow:0 0 0 3px var(--accent,#005A9C)}
+.dot.ok{background:var(--good)} .dot.miss{background:var(--bad)}
+.scene-wrap{position:relative;flex:0 0 auto;height:clamp(110px,min(26vh,calc((100vw - 28px) / 5)),240px);border-radius:24px;overflow:hidden;
+  box-shadow:0 6px 0 rgba(0,0,0,.15);border:4px solid rgba(255,255,255,.85);background:#7FD3FF}
+.scene-wrap svg{position:absolute;inset:0;width:100%;height:100%}
+.toast{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.4);opacity:0;pointer-events:none;
+  font-size:clamp(28px,4.4vw,52px);font-weight:900;color:#fff;white-space:nowrap;
+  text-shadow:0 4px 0 rgba(0,0,0,.4),0 0 18px rgba(0,0,0,.45)}
+.toast.show{animation:toast 1.25s ease-out forwards}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}18%{opacity:1;transform:translate(-50%,-50%) scale(1.12)}30%{transform:translate(-50%,-50%) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-80%) scale(1)}}
+.scene-label{position:absolute;right:12px;top:10px;background:rgba(0,0,0,.5);color:#fff;border-radius:14px;padding:4px 12px;font-size:18px;max-width:calc(100% - 24px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.play{flex:1;min-height:0;display:flex;gap:14px}
+@media (orientation:portrait){ .play{flex-direction:column} }
+.qcard{flex:1.25;min-height:0;min-width:0;background:#fff;border-radius:26px;padding:40px 20px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+  box-shadow:0 6px 0 rgba(0,0,0,.12),0 10px 22px rgba(0,0,0,.08);overflow:hidden;position:relative}
+.qcard .qtag{position:absolute;top:10px;left:14px;font-size:17px;color:#fff;background:var(--accent,#005A9C);border-radius:12px;padding:3px 12px}
+.prompt{font-size:clamp(24px,4.2vmin,40px);line-height:1.25;text-align:center;font-weight:900;max-width:100%}
+.prompt.long{font-size:clamp(22px,3.4vmin,32px)}
+.prompt.big{font-size:clamp(34px,6.6vmin,60px)}
+.qcard::after{content:attr(data-icon);position:absolute;right:-10px;bottom:-24px;font-size:150px;opacity:.07;pointer-events:none;transform:rotate(-12deg)}
+.qcard>*{position:relative;z-index:1}
+.qcard .qtag{position:absolute}
+.prompt .eq{font-size:1.35em;white-space:nowrap}
+.visual{display:flex;align-items:center;justify-content:center;max-width:100%;min-height:0}
+.visual:empty{display:none}
+.answers{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:14px}
+.answers.three,.answers.two{grid-template-columns:1fr}
+.answers.three .ans{font-size:clamp(44px,8vmin,72px)}
+@media (orientation:portrait){ .answers.three{grid-template-columns:repeat(3,1fr)} .answers.two{grid-template-columns:1fr 1fr} }
+@media (orientation:portrait){ .answers{flex:0 0 auto;height:clamp(200px,28vh,300px)} }
+.ans{min-height:72px;border-radius:24px;background:#fff;font-size:clamp(30px,5vmin,50px);font-weight:900;color:var(--ink);
+  display:flex;align-items:center;justify-content:center;padding:8px 10px;text-align:center;line-height:1.1;
+  box-shadow:0 7px 0 var(--accent-dark,#003f6e),0 10px 18px rgba(0,0,0,.12);border:4px solid var(--accent,#005A9C);transition:transform .08s,background .15s}
+.ans:active{transform:translateY(4px);box-shadow:0 3px 0 var(--accent-dark,#003f6e)}
+.ans.small{font-size:clamp(22px,3.4vmin,34px)}
+.ans.right{background:var(--good);color:#fff;border-color:#118a43;box-shadow:0 7px 0 #0c6b33;animation:pop .45s}
+.ans.wrong{background:#ffe1d3;border-color:var(--bad);color:#b3401a;box-shadow:0 7px 0 #d0551f;animation:shake .45s}
+.ans.dim{opacity:.45}
+.ans:disabled{cursor:default}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.08)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-7px)}80%{transform:translateX(6px)}}
+.unit{font-size:.55em;margin-left:.25em;opacity:.8;font-weight:800}
+
+/* fractions & math bits */
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .12em;line-height:1.05;font-size:.92em}
+.frac>span{padding:0 .18em}
+.frac>span:last-child{border-top:.09em solid currentColor}
+.mixed{display:inline-flex;align-items:center;white-space:nowrap}
+.mixed .frac{margin-left:.08em}
+.blank{display:inline-block;min-width:1.4em;padding:0 .2em;border-radius:.3em;background:#fff3b0;border:3px dashed #e0a800;color:#b07d00;text-align:center}
+.hl{color:#fff;background:var(--cardinal);border-radius:.2em;padding:0 .1em}
+sup{font-size:.6em}
+.emo-wrap{display:flex;flex-direction:column;align-items:center;gap:4px}
+.emo-row{display:flex;gap:4px}
+.em{font-size:var(--es,44px);line-height:1.1;display:inline-block;position:relative;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+.em.gone{opacity:.3;filter:grayscale(1)}
+.em.gone::after{content:"";position:absolute;left:-4%;right:-4%;top:48%;height:.1em;background:#e53935;transform:rotate(-35deg);border-radius:4px}
+.cmp{display:flex;gap:18px}
+.grp{border:4px solid #7cc7ff;border-radius:20px;padding:8px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;background:#f2faff}
+.grp.b{border-color:#ffbe5c;background:#fff8ec}
+.grp b{font-size:28px}
+.plus{font-size:44px;font-weight:900;padding:0 8px}
+.addrow{display:flex;align-items:center;flex-wrap:wrap;justify-content:center}
+.blocks{display:flex;gap:6px;align-items:flex-end}
+.rod{display:grid;grid-template-rows:repeat(10,13px);gap:2px;padding:3px;background:#0b77c9;border-radius:6px}
+.rod i,.ones i{display:block;width:17px;height:13px;background:#8fd0ff;border-radius:3px}
+.ones{display:grid;grid-template-columns:repeat(2,17px);gap:4px;margin-left:10px}
+.ones i{background:#ffcc00;outline:2px solid #c99a00;height:15px}
+.coins{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;max-width:560px}
+.coin{border-radius:50%;display:grid;place-items:center;font-weight:900;color:#3a3a3a;font-size:20px;
+  background:radial-gradient(circle at 35% 30%,#fff,#cfd6de 45%,#9aa4ae);box-shadow:inset 0 0 0 4px #aab3bc,0 4px 0 rgba(0,0,0,.2)}
+.coin.q{width:86px;height:86px;font-size:24px}.coin.n{width:74px;height:74px}.coin.d{width:60px;height:60px;font-size:18px}
+.coin.p{width:66px;height:66px;background:radial-gradient(circle at 35% 30%,#ffd7b0,#d98b4e 50%,#a95a24);box-shadow:inset 0 0 0 4px #b86a33,0 4px 0 rgba(0,0,0,.2);color:#4a2308}
+.clock{width:clamp(150px,22vh,210px);height:auto}
+.fracfig{width:clamp(140px,20vh,200px);height:auto}
+.fracbar{width:clamp(240px,34vw,360px);height:auto}
+.figsvg{max-height:clamp(150px,24vh,240px);width:auto;max-width:100%}
+.ldiv{display:inline-flex;align-items:flex-start;font-size:clamp(40px,5vw,60px);font-weight:900}
+.ldiv .dvs{padding:.08em .15em .08em 0}
+.ldiv .dvd{border-top:.09em solid currentColor;border-left:.09em solid currentColor;border-top-left-radius:.35em;padding:.08em .25em 0 .3em}
+.chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.chip{min-width:74px;padding:10px 12px 8px;border-radius:16px 16px 22px 22px;background:var(--cardinal);color:var(--gold);font-size:32px;text-align:center;box-shadow:0 4px 0 #5e0000}
+.chip small{display:block;font-size:14px;color:#fff;opacity:.85}
+.bignum{font-size:clamp(40px,6vw,64px);letter-spacing:2px;font-weight:900}
+
+/* feedback sheet (slides down from the top so the answer buttons stay visible) */
+.sheet{position:absolute;left:calc(var(--sl) + 14px);right:calc(var(--sr) + 14px);top:calc(var(--st) + 10px);z-index:20;
+  background:#fffdf3;border-radius:28px;padding:18px 22px;display:flex;gap:18px;align-items:center;
+  box-shadow:0 12px 40px rgba(0,0,0,.35);border:5px solid #ffcc00;transform:translateY(calc(-100% - 40px));transition:transform .35s cubic-bezier(.2,1.3,.4,1)}
+.sheet.show{transform:none}
+.sheet .coach{font-size:64px;line-height:1}
+.sheet .txt{flex:1;min-width:0}
+.sheet .h{font-size:clamp(26px,3vw,34px);font-weight:900;color:#c25400}
+.sheet .a{font-size:clamp(24px,2.8vw,32px);margin:4px 0}
+.sheet .a b{color:var(--good);font-size:1.2em}
+.sheet .hint{font-size:clamp(19px,2.1vw,23px);font-weight:700;opacity:.85;line-height:1.35}
+.bigbtn{min-height:76px;min-width:160px;padding:0 28px;border-radius:24px;font-size:30px;color:#fff;background:var(--good);box-shadow:0 7px 0 #0c6b33;transition:transform .08s}
+.bigbtn:active{transform:translateY(4px);box-shadow:0 3px 0 #0c6b33}
+.bigbtn.blue{background:var(--dodger);box-shadow:0 7px 0 #003a66}
+.bigbtn.red{background:var(--cardinal);box-shadow:0 7px 0 #5c0000}
+.bigbtn.gray{background:#8795a8;box-shadow:0 7px 0 #5d6a7c}
+@media (orientation:portrait){ .sheet{flex-wrap:wrap} .sheet .bigbtn{width:100%} }
+@media (max-height:700px){ .sheet .coach{display:none} }
+
+/* overlays */
+.overlay{position:absolute;inset:0;z-index:40;display:none;align-items:center;justify-content:center;background:rgba(6,22,48,.55);
+  padding:calc(var(--st) + 16px) calc(var(--sr) + 16px) calc(var(--sb) + 16px) calc(var(--sl) + 16px)}
+.overlay.show{display:flex}
+.modal{background:#fff;border-radius:32px;width:min(640px,100%);max-height:100%;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.4);text-align:center;animation:rise .45s cubic-bezier(.2,1.4,.4,1)}
+@keyframes rise{from{transform:translateY(60px) scale(.85);opacity:0}to{transform:none;opacity:1}}
+.modal .mhead{padding:22px 20px 18px;color:#fff;position:relative;overflow:hidden}
+.modal .mbody{padding:18px 24px 24px;display:flex;flex-direction:column;gap:14px;align-items:center}
+.win-title{font-size:clamp(40px,6.5vw,68px);font-weight:900;line-height:1.02;text-shadow:0 5px 0 rgba(0,0,0,.3);animation:bounce 1s ease-in-out infinite alternate}
+.win-sub{font-size:24px;margin-top:6px;opacity:.95}
+@keyframes bounce{from{transform:scale(1) rotate(-2deg)}to{transform:scale(1.06) rotate(2deg)}}
+.bigstars{display:flex;gap:10px;justify-content:center}
+.bigstars svg{width:clamp(70px,11vw,100px);height:auto;transform:scale(0);animation:starIn .5s cubic-bezier(.2,1.6,.4,1) forwards}
+.bigstars svg:nth-child(2){animation-delay:.25s;margin-top:-18px}.bigstars svg:nth-child(3){animation-delay:.5s}
+@keyframes starIn{to{transform:scale(1)}}
+.score-line{font-size:30px}
+.btnrow{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.field{display:flex;flex-direction:column;gap:8px;width:100%;text-align:left}
+.field label{font-size:22px}
+.field input{font-size:28px;padding:14px 18px;border-radius:18px;border:4px solid #b9d7f0;outline:none;width:100%;font-weight:800;color:var(--ink)}
+.field input:focus{border-color:var(--dodger)}
+.row{display:flex;align-items:center;justify-content:space-between;width:100%;gap:12px}
+.toggle{min-width:150px;min-height:68px;border-radius:999px;font-size:24px;background:#e3e9f2}
+.toggle.on{background:var(--good);color:#fff}
+#confetti{position:absolute;inset:0;z-index:45;pointer-events:none;display:none;width:100%;height:100%}
+.bob{animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.wave-move{animation:wmove 5s ease-in-out infinite alternate}
+@keyframes wmove{from{transform:translateX(0)}to{transform:translateX(-24px)}}
+.cloud{animation:cloud 30s linear infinite alternate}
+@keyframes cloud{from{transform:translateX(0)}to{transform:translateX(60px)}}
+@media (prefers-reduced-motion:reduce){.bob,.wave-move,.cloud,.win-title{animation:none}}
+</style>
+</head>
+<body>
+<div id="app">
+  <section id="home" class="screen active" aria-label="Home">
+    <div class="home-head">
+      <svg class="logo" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="47" fill="#fff"/>
+        <circle cx="50" cy="50" r="41" fill="#005A9C"/>
+        <path d="M50 14l10.6 23.4 25.4 2.6-19 17.2 5.4 25L50 69.4 27.6 82.2l5.4-25-19-17.2 25.4-2.6z" fill="#FFCC00" stroke="#990000" stroke-width="4" stroke-linejoin="round"/>
+        <text x="50" y="63" text-anchor="middle" font-size="30" font-weight="900" fill="#990000" font-family="Arial">+</text>
+      </svg>
+      <div class="titles">
+        <h1 class="title">Sports Math <span class="gold">All-Stars</span></h1>
+        <div class="subtitle" id="hello">Pick a grade and hit the field!</div>
+      </div>
+      <div class="head-btns">
+        <button class="round-btn" id="homeSound" aria-label="Sound on or off">🔊</button>
+        <button class="round-btn" id="openSettings" aria-label="Settings">⚙️</button>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="foot-note">Every grade is open — parents &amp; teachers, pick any level! ⭐ Earn up to 3 stars per world.</div>
+  </section>
+
+  <section id="game" class="screen" aria-label="Game">
+    <div class="topbar">
+      <button class="round-btn" id="goHome" aria-label="Home">🏠</button>
+      <div class="gtitle"><div class="w" id="gWorld"></div><div class="g" id="gGrade"></div></div>
+      <div class="dots" id="dots"></div>
+      <button class="round-btn" id="gameSound" aria-label="Sound on or off">🔊</button>
+    </div>
+    <div class="scene-wrap" id="sceneWrap"><div id="scene"></div><div class="scene-label" id="sceneLabel"></div><div class="toast" id="toast"></div></div>
+    <div class="play">
+      <div class="qcard"><div class="qtag" id="qtag"></div><div class="prompt" id="prompt"></div><div class="visual" id="visual"></div></div>
+      <div class="answers" id="answers"></div>
+    </div>
+    <div class="sheet" id="sheet" role="dialog" aria-live="polite">
+      <div class="coach" id="coach">💪</div>
+      <div class="txt"><div class="h" id="sheetH">Nice try!</div><div class="a" id="sheetA"></div><div class="hint" id="sheetHint"></div></div>
+      <button class="bigbtn" id="nextBtn">Next ▶</button>
+    </div>
+  </section>
+
+  <canvas id="confetti"></canvas>
+
+  <div class="overlay" id="winOv">
+    <div class="modal">
+      <div class="mhead" id="winHead"><div class="win-title" id="winTitle">TOUCHDOWN!</div><div class="win-sub" id="winSub"></div></div>
+      <div class="mbody">
+        <div class="bigstars" id="winStars"></div>
+        <div class="score-line" id="winScore"></div>
+        <div id="winMsg" style="font-size:22px;opacity:.85"></div>
+        <div class="btnrow">
+          <button class="bigbtn blue" id="againBtn">↻ Play Again</button>
+          <button class="bigbtn" id="nextLvlBtn">Next Grade ▶</button>
+          <button class="bigbtn gray" id="winHome">🏠 Home</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="setOv">
+    <div class="modal">
+      <div class="mhead" style="background:linear-gradient(135deg,#005A9C,#0B77C9)"><div class="win-title" style="font-size:44px;animation:none">⚙️ Settings</div></div>
+      <div class="mbody">
+        <div class="field"><label for="nameIn">Player name (optional)</label><input id="nameIn" maxlength="14" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Type your name"></div>
+        <div class="row"><span>Sound effects</span><button class="toggle" id="sndToggle">On</button></div>
+        <div class="row"><span>Start over?</span><button class="bigbtn red" id="resetBtn" style="font-size:24px">Reset progress</button></div>
+        <button class="bigbtn blue" id="closeSet" style="width:100%">Done ✓</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+"use strict";
+/* Sports Math All-Stars — single-file K-6 math game. All art is drawn in code. */
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const gcd=(a,b)=>{a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a;};
+const lcm=(a,b)=>a/gcd(a,b)*b;
+const MINUS='\u2212', TIMES='\u00D7', DIV='\u00F7';
+const $=id=>document.getElementById(id);
+function fmt(x,dp){
+  if(typeof x!=='number') return String(x);
+  if(!isFinite(x)) return 'NaN';
+  const neg=x<0; x=Math.abs(x);
+  let s = dp!=null ? x.toFixed(dp) : String(Math.round(x*1e6)/1e6);
+  if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,'');
+  let [i,f]=s.split('.'); i=i.replace(/\B(?=(\d{3})+(?!\d))/g,',');
+  return (neg&&(i!=='0'||f)?MINUS:'')+i+(f?'.'+f:'');
+}
+const sn=x=>x<0?`(${fmt(x)})`:fmt(x);
+// ---- answer values: {key (for equality), html (for display)} ----
+function num(x,o={}){return {key:'n:'+(Math.round(x*1e6)/1e6),v:x,
+  html:`${o.pre||''}${fmt(x,o.dp)}${o.suf||''}${o.unit?`<span class="unit">${o.unit}</span>`:''}`};}
+function fracHTML(n,d){return `<span class="frac"><span>${fmt(n)}</span><span>${fmt(d)}</span></span>`;}
+function frac(n,d,o={}){
+  if(o.reduce){const g=gcd(n,d)||1;n/=g;d/=g;}
+  const g=gcd(n,d)||1; const key='f:'+(n/g)+'/'+(d/g);
+  let html;
+  if(o.mixed && n>=d){const w=Math.floor(n/d),r=n%d; html=r?`<span class="mixed">${w}${fracHTML(r,d)}</span>`:`${w}`;}
+  else html=fracHTML(n,d);
+  return {key,html,v:n/d};
+}
+const str=(s,html,key)=>({key:key||('s:'+s),html:html||s});
+function valid(c){return !!(c && c.key && !/NaN|undefined|Infinity|null/.test(c.key+c.html));}
+function build(ans,cands,fb,count=4,neg=false){
+  const out=[ans], keys=new Set([ans.key]);
+  const ok=c=>valid(c)&&!keys.has(c.key)&&(neg||!(typeof c.v==='number'&&c.v<0));
+  for(const c of shuffle(cands||[])){ if(out.length>=count)break; if(!ok(c))continue; keys.add(c.key); out.push(c);}
+  let guard=0;
+  while(out.length<count && fb && guard++<300){const c=fb(); if(!ok(c))continue; keys.add(c.key); out.push(c);}
+  return shuffle(out);
+}
+function nfb(x,spread,o={},min=0){return ()=>{let d=0;while(!d)d=R(-spread,spread);const y=Math.round((x+d*(o.step||1))*1e6)/1e6;return y<min?null:num(y,o);};}
+function P(prompt,visual,ans,cands,fb,hint,extra={}){
+  const choices=build(ans,cands,fb,extra.count||4,!!extra.neg);
+  if(extra.count&&extra.count<4)choices.sort((x,y)=>x.key<y.key?-1:1);
+  return Object.assign({prompt,visual:visual||'',choices,answer:ans.key,answerHTML:ans.html,hint},extra);
+}
+const NAMES=['Maya','Leo','Sofia','Kai','Ava','Mateo','Luna','Diego','Zoe','Noah','Priya','Eli','Nina','Omar','Ruby','Theo','Jada','Ben','Isla','Marco'];
+const nm=()=>pick(NAMES);
+const plural=(n,w,p)=>n===1?w:(p||w+'s');
+// ---- visuals ----
+function emo(e,n,gone=0,size){
+  const rows=[];for(let i=0;i<n;i+=5)rows.push(Math.min(5,n-i));
+  const es=size||(n<=5?52:n<=10?46:n<=15?38:32);
+  let h=`<div class="emo-wrap" style="--es:${es}px">`, k=0;
+  rows.forEach(c=>{h+='<div class="emo-row">';for(let j=0;j<c;j++,k++)h+=`<span class="em${k>=n-gone?' gone':''}">${e}</span>`;h+='</div>';});
+  return h+'</div>';
+}
+function blocks(t,o){return `<div class="blocks">${Array.from({length:t},()=>'<div class="rod">'+'<i></i>'.repeat(10)+'</div>').join('')}<div class="ones">${'<i></i>'.repeat(o)}</div></div>`;}
+const COIN={q:25,d:10,n:5,p:1};
+function coinsHTML(list){return '<div class="coins">'+list.map(c=>`<span class="coin ${c}">${COIN[c]}¢</span>`).join('')+'</div>';}
+function clockSVG(h,m){
+  let t='',n='';
+  for(let i=0;i<60;i++){const a=i*Math.PI/30,r1=i%5?86:80;t+=`<line x1="${(100+Math.sin(a)*r1).toFixed(1)}" y1="${(100-Math.cos(a)*r1).toFixed(1)}" x2="${(100+Math.sin(a)*90).toFixed(1)}" y2="${(100-Math.cos(a)*90).toFixed(1)}" stroke="#667" stroke-width="${i%5?1.5:3.5}"/>`;}
+  for(let i=1;i<=12;i++){const a=i*Math.PI/6;n+=`<text x="${(100+Math.sin(a)*66).toFixed(1)}" y="${(100-Math.cos(a)*66+8).toFixed(1)}" text-anchor="middle" font-size="22" font-weight="900" fill="#1d2a44" font-family="Arial">${i}</text>`;}
+  const ha=((h%12)+m/60)*30, ma=m*6;
+  return `<svg class="clock" viewBox="0 0 200 200"><circle cx="100" cy="100" r="96" fill="#005A9C"/><circle cx="100" cy="100" r="90" fill="#fff"/>${t}${n}
+  <line x1="100" y1="100" x2="100" y2="54" stroke="#1d2a44" stroke-width="9" stroke-linecap="round" transform="rotate(${ha} 100 100)"/>
+  <line x1="100" y1="100" x2="100" y2="24" stroke="#e53935" stroke-width="5" stroke-linecap="round" transform="rotate(${ma} 100 100)"/>
+  <circle cx="100" cy="100" r="7" fill="#1d2a44"/></svg>`;
+}
+function pieSVG(k,d,color){
+  let p='';
+  for(let i=0;i<d;i++){const a0=i/d*2*Math.PI-Math.PI/2,a1=(i+1)/d*2*Math.PI-Math.PI/2;
+    const x0=60+50*Math.cos(a0),y0=60+50*Math.sin(a0),x1=60+50*Math.cos(a1),y1=60+50*Math.sin(a1);
+    p+=`<path d="M60 60 L${x0.toFixed(2)} ${y0.toFixed(2)} A50 50 0 0 1 ${x1.toFixed(2)} ${y1.toFixed(2)} Z" fill="${i<k?color:'#fff'}" stroke="#1d2a44" stroke-width="3" stroke-linejoin="round"/>`;}
+  return `<svg class="fracfig" viewBox="0 0 120 120">${p}</svg>`;
+}
+function barSVG(k,d,color){
+  const w=300/d;let p='';
+  for(let i=0;i<d;i++)p+=`<rect x="${5+i*w}" y="5" width="${w}" height="70" fill="${i<k?color:'#fff'}" stroke="#1d2a44" stroke-width="3"/>`;
+  return `<svg class="fracbar" viewBox="0 0 310 80">${p}</svg>`;
+}
+function areaSVG(w,h){
+  const c=Math.min(30,Math.floor(280/Math.max(w,h))),W=w*c,H=h*c;let g='';
+  for(let i=0;i<w;i++)for(let j=0;j<h;j++)g+=`<rect x="${60+i*c}" y="${40+j*c}" width="${c}" height="${c}" fill="${(i+j)%2?'#2e8b3a':'#37a047'}" stroke="#fff" stroke-width="1.5"/>`;
+  return `<svg class="figsvg" viewBox="0 0 ${W+90} ${H+60}">${g}<rect x="60" y="40" width="${W}" height="${H}" fill="none" stroke="#1d2a44" stroke-width="4"/>
+  <text x="${60+W/2}" y="28" text-anchor="middle" font-size="24" font-weight="900" fill="#005A9C" font-family="Arial">${w} units</text>
+  <text x="44" y="${40+H/2}" text-anchor="middle" font-size="24" font-weight="900" fill="#990000" font-family="Arial" transform="rotate(-90 44 ${40+H/2})">${h} units</text></svg>`;
+}
+function boxSVG(l,w,h){
+  const L=60+l*16,H=40+h*12,D=18+w*7,dx=D*.8,dy=D*.55,x0=20,y0=20+dy;
+  return `<svg class="figsvg" viewBox="0 0 ${L+dx+110} ${H+dy+60}">
+  <polygon points="${x0},${y0} ${x0+dx},${y0-dy} ${x0+dx+L},${y0-dy} ${x0+L},${y0}" fill="#FFE27A" stroke="#1d2a44" stroke-width="3"/>
+  <polygon points="${x0+L},${y0} ${x0+L+dx},${y0-dy} ${x0+L+dx},${y0-dy+H} ${x0+L},${y0+H}" fill="#E0A800" stroke="#1d2a44" stroke-width="3"/>
+  <rect x="${x0}" y="${y0}" width="${L}" height="${H}" fill="#FFCC00" stroke="#1d2a44" stroke-width="3"/>
+  <text x="${x0+L/2}" y="${y0+H+30}" text-anchor="middle" font-size="24" font-weight="900" fill="#990000" font-family="Arial">${l} long</text>
+  <text x="${x0+L+dx+8}" y="${y0-dy+H/2+4}" font-size="24" font-weight="900" fill="#005A9C" font-family="Arial">${h} tall</text>
+  <text x="${x0+dx/2+L/2}" y="${y0-dy-6}" text-anchor="middle" font-size="22" font-weight="900" fill="#1d6b2e" font-family="Arial">${w} wide</text></svg>`;
+}
+const chips=(vals,label)=>'<div class="chips">'+vals.map((v,i)=>`<div class="chip"><small>${label} ${i+1}</small>${fmt(v)}</div>`).join('')+'</div>';
+// ================= PROBLEM GENERATORS (per grade: [weight, fn]) =================
+const G=[];
+const BEACH=[{e:'🐚',p:'shells'},{e:'🦀',p:'crabs'},{e:'🐠',p:'fish'},{e:'🐬',p:'dolphins'},{e:'🏐',p:'beach balls'},{e:'🍦',p:'ice creams'},{e:'⭐',p:'starfish'},{e:'🩴',p:'flip-flops'}];
+// ----- K : Boogie Board Beach -----
+G[0]=[
+ [3,()=>{const n=R(3,20),it=pick(BEACH);
+   return P(`How many ${it.p}?`,emo(it.e,n),num(n),[num(n-1),num(n+1),num(n+2),num(n-2),num(n+10)],nfb(n,3,{},1),
+   `Touch and count each one: 1, 2, 3… There are ${n} ${it.p}.`);}],
+ [2,()=>{let a=R(1,10),b=R(1,10);while(a===b)b=R(1,10);const it=pick(BEACH),more=Math.random()<.6;
+   const ansA=more?a>b:a<b;
+   return P(`Which group has ${more?'MORE':'FEWER'} ${it.p}?`,`<div class="cmp"><div class="grp a"><b>A</b>${emo(it.e,a,0,30)}</div><div class="grp b"><b>B</b>${emo(it.e,b,0,30)}</div></div>`,
+   str(ansA?'A':'B','Group '+(ansA?'A':'B')),[str(ansA?'B':'A','Group '+(ansA?'B':'A'))],null,
+   `Group A has ${a} and group B has ${b}. ${Math.max(a,b)} is more than ${Math.min(a,b)}.`,{count:2});}],
+ [3,()=>{const s=R(2,10),a=R(1,s-1),b=s-a,it=pick(BEACH);
+   return P(`<span class="eq">${a} + ${b} = ?</span>`,`<div class="addrow">${emo(it.e,a,0,46)}<span class="plus">+</span>${emo(it.e,b,0,46)}</div>`,
+   num(s),[num(s+1),num(s-1),num(Math.abs(a-b)),num(s+2)],nfb(s,3,{},0),`Count them all together: ${a} and ${b} more makes ${s}.`);}],
+ [3,()=>{const a=R(3,10),b=R(1,a-1),it=pick(BEACH);
+   return P(`${a} ${it.p}. ${b} go away. How many are left?<br><span class="eq">${a} ${MINUS} ${b} = ?</span>`,emo(it.e,a,b,40),
+   num(a-b),[num(a-b+1),num(a-b-1),num(a+b),num(a)],nfb(a-b,3,{},0),`Count the ones that are NOT crossed out: ${a} take away ${b} leaves ${a-b}.`);}],
+ [2,()=>{const after=Math.random()<.6,n=after?R(1,19):R(2,20),a=after?n+1:n-1;
+   return P(`What number comes right <b>${after?'after':'before'}</b> <span class="eq">${n}</span>?`,'',num(a),[num(after?n-1:n+1),num(a+1),num(a-1),num(n)],nfb(a,3,{},0),
+   `Count: … ${n-1}, ${n}, ${n+1} … The number ${after?'after':'before'} ${n} is ${a}.`);}],
+ [1,()=>{const s=shuffle([...Array(21).keys()]).slice(0,4),mx=Math.max(...s);
+   return P(`Which number is the <b>biggest</b>?`,'',num(mx),s.filter(x=>x!==mx).map(x=>num(x)),null,`${mx} is the biggest. On a number line it's farthest to the right.`);}],
+];
+// ----- 1 : Malibu Surf -----
+G[1]=[
+ [3,()=>{const a=R(3,10),b=R(2,10),s=a+b;
+   return P(`<span class="eq">${a} + ${b} = ?</span>`,'',num(s),[num(s+1),num(s-1),num(s+10),num(Math.abs(a-b)),num(s-2)],nfb(s,3,{},0),
+   s>10?`Make a ten! ${a} + ${10-a} = 10, then ${b-(10-a)} more is ${s}.`:`Start at ${a} and count up ${b}: that's ${s}.`);}],
+ [3,()=>{const a=R(10,20),b=R(2,Math.min(9,a)),d=a-b;
+   return P(`<span class="eq">${a} ${MINUS} ${b} = ?</span>`,'',num(d),[num(d+1),num(d-1),num(a+b),num(d+2)],nfb(d,3,{},0),
+   `Count back ${b} from ${a}: you land on ${d}. Check: ${d} + ${b} = ${a}.`);}],
+ [2,()=>{const c=R(8,20),a=R(1,c-1),x=c-a;
+   return P(`<span class="eq">${a} + <span class="blank">?</span> = ${c}</span>`,'',num(x),[num(x+1),num(x-1),num(c+a),num(c)],nfb(x,3,{},0),
+   `Think: ${a} plus what makes ${c}? Count up from ${a} to ${c}: ${x}.`);}],
+ [2,()=>{const t=R(1,9),o=R(0,9),n=t*10+o;
+   return P(`Count the tens and ones. What number is it?`,blocks(t,o),num(n),[num(o*10+t),num(n+10),num(n-10),num(t+o),num(n+1)],nfb(n,5,{},1),
+   `${t} ${plural(t,'ten')} = ${t*10}, plus ${o} ${plural(o,'one')}. ${t*10} + ${o} = ${n}.`);}],
+ [1,()=>{const n=R(11,99),t=Math.floor(n/10),o=n%10,askT=Math.random()<.5,a=askT?t:o;
+   return P(`How many <b>${askT?'tens':'ones'}</b> are in <span class="eq">${n}</span>?`,'',num(a),[num(askT?o:t),num(n),num(a+1),num(a===0?2:a-1)],nfb(a,3,{},0),
+   `In ${n}, the ${t} is in the tens place and the ${o} is in the ones place.`);}],
+ [2,()=>{let a=R(10,99),b=Math.random()<.2?a:R(10,99);const s=a<b?'<':a>b?'>':'=',E=x=>x==='<'?'&lt;':x==='>'?'&gt;':'=';
+   return P(`Which sign goes in the box?`,`<div class="bignum">${a} <span class="blank">?</span> ${b}</div>`,str(s,E(s)),
+   ['<','>','='].filter(x=>x!==s).map(x=>str(x,E(x))),null,
+   s==='='?`Both numbers are ${a}, so they're equal.`:`The open mouth faces the bigger number: ${a} ${E(s)} ${b}.`,{count:3});}],
+ [3,()=>{const n1=nm(),add=Math.random()<.55;let a,b,ans,q,h;
+   if(add){a=R(3,10);b=R(3,10);ans=a+b;q=`${n1} caught ${a} waves in the morning and ${b} waves after lunch. How many waves in all?`;h=`Add: ${a} + ${b} = ${ans}.`;}
+   else{a=R(11,20);b=R(2,9);ans=a-b;q=`${n1} saw ${a} surfers in the water. ${b} paddled back to the beach. How many are still surfing?`;h=`Subtract: ${a} ${MINUS} ${b} = ${ans}.`;}
+   return P(q,'',num(ans),[num(ans+1),num(ans-1),num(add?Math.abs(a-b):a+b),num(ans+2)],nfb(ans,3,{},0),h,{long:true});}],
+];
+// ----- 2 : Dodgers Baseball -----
+G[2]=[
+ [3,()=>{let a,b;do{a=R(12,79);b=R(11,99-a);}while(Math.random()<.75&&(a%10+b%10)<10);const s=a+b;
+   return P(`<span class="eq">${a} + ${b} = ?</span>`,'',num(s),[num(s-10),num(s+10),num(s+1),num(s-1)],nfb(s,5,{},0),
+   `Add ones: ${a%10} + ${b%10} = ${a%10+b%10}${a%10+b%10>=10?' — regroup 10 ones as 1 ten':''}. Then add the tens. Total: ${s}.`);}],
+ [3,()=>{let a,b;do{a=R(30,99);b=R(11,a-5);}while(Math.random()<.75&&(a%10)>=(b%10));const d=a-b;
+   const err=Math.abs(Math.floor(a/10)-Math.floor(b/10))*10+Math.abs(a%10-b%10);
+   return P(`<span class="eq">${a} ${MINUS} ${b} = ?</span>`,'',num(d),[num(err),num(d+10),num(d-10),num(d+1)],nfb(d,5,{},0),
+   `${a%10<b%10?`You can't take ${b%10} from ${a%10}, so trade 1 ten for 10 ones. `:''}${a} ${MINUS} ${b} = ${d}. Check: ${d} + ${b} = ${a}.`);}],
+ [2,()=>{const step=pick([2,5,10,10,100,5]),start=step===100?R(1,5)*100:step*R(0,6)+(step===2&&Math.random()<.5?1:0);
+   const seq=[0,1,2,3,4].map(i=>start+i*step),hole=R(1,4),a=seq[hole];
+   return P(`Skip count! What number is missing?`,`<div class="bignum">${seq.map((v,i)=>i===hole?'<span class="blank">?</span>':v).join(', ')}</div>`,
+   num(a),[num(a+step),num(a-step),num(a+1),num(a-1)],nfb(a,3,{step},0),`The numbers go up by ${step} each time. ${a-step} + ${step} = ${a}.`);}],
+ [3,()=>{let list,t;do{list=[];const q=R(0,3),d=R(0,3),n=R(0,2),p=R(0,4);
+     for(let i=0;i<q;i++)list.push('q');for(let i=0;i<d;i++)list.push('d');for(let i=0;i<n;i++)list.push('n');for(let i=0;i<p;i++)list.push('p');
+     t=list.reduce((s,c)=>s+COIN[c],0);}while(t<5||t>99||list.length<2);
+   return P(`How much money is this?`,coinsHTML(list),num(t,{suf:'¢'}),
+   [num(list.length,{suf:'¢'}),num(t+5,{suf:'¢'}),num(t-5,{suf:'¢'}),num(t+10,{suf:'¢'}),num(t+1,{suf:'¢'})],nfb(t,6,{suf:'¢'},1),
+   `Count the biggest coins first: quarters 25¢, dimes 10¢, nickels 5¢, pennies 1¢. Total: ${t}¢.`);}],
+ [2,()=>{const h=R(1,12),m=R(0,11)*5,pad=x=>String(x).padStart(2,'0'),T=(a,b)=>str(`${a}:${pad(b)}`);
+   const c=[T(h%12+1,m),T((h+10)%12+1,m),T(h,(m+5)%60),T(h,(m+55)%60),T(h,(m+10)%60)];
+   if(m>0&&h<12)c.push(T(m/5,h*5));
+   return P(`What time is it on the stadium clock?`,clockSVG(h,m),T(h,m),c,null,
+   `The short hand points to the hour (${h}). The long hand counts by 5s: ${m/5} ${TIMES} 5 = ${m} minutes.`);}],
+ [2,()=>{const h=R(1,9),t=R(0,9),o=R(0,9),n=h*100+t*10+o;
+   return P(`<span class="eq">${h*100} + ${t*10} + ${o} = ?</span>`,'',num(n),[num(h*100+o*10+t),num(h+t+o),num(n+100),num(n+10),num(n-10)],nfb(n,10,{},100),
+   `${h} hundreds, ${t} tens and ${o} ones make ${n}.`);}],
+ [3,()=>{const n1=nm(),k=R(0,3);let a,b,ans,q,h,err;
+   if(k===0){a=R(15,60);b=R(12,99-a);ans=a+b;q=`A vendor sold ${a} Dodger Dogs in the 1st inning and ${b} in the 2nd. How many in all?`;h=`${a} + ${b} = ${ans}.`;err=ans-10;}
+   else if(k===1){a=R(40,99);b=R(12,a-10);ans=a-b;q=`${a} fans got bobbleheads. ${b} of them went home early. How many bobblehead fans are still here?`;h=`${a} ${MINUS} ${b} = ${ans}.`;err=a+b;}
+   else if(k===2){a=R(20,50);b=R(20,49);ans=a+b;q=`${n1} counted ${a} blue caps and ${b} white caps at Dodger Stadium. How many caps?`;h=`${a} + ${b} = ${ans}.`;err=ans+10;}
+   else{a=R(50,99);b=R(15,45);ans=a-b;q=`The Dodgers had ${a} baseballs for batting practice. They hit ${b} into the stands! How many are left?`;h=`${a} ${MINUS} ${b} = ${ans}.`;err=ans+10;}
+   return P(q,'',num(ans),[num(err),num(ans+1),num(ans-1),num(ans-10)],nfb(ans,6,{},0),h,{long:true});}],
+];
+// ----- 3 : Dodgers October -----
+G[3]=[
+ [4,()=>{const a=R(2,10),b=R(2,10),p=a*b;
+   return P(`<span class="eq">${a} ${TIMES} ${b} = ?</span>`,'',num(p),[num(a*(b+1)),num((a+1)*b),num(a*(b-1)),num(a+b),num(p+10)],nfb(p,5,{},1),
+   `${a} ${TIMES} ${b} means ${a} groups of ${b}: ${Array(Math.min(a,5)).fill(b).join(' + ')}${a>5?' + …':''} = ${p}.`);}],
+ [3,()=>{const b=R(2,10),q=R(2,10),a=b*q;
+   return P(`<span class="eq">${a} ${DIV} ${b} = ?</span>`,'',num(q),[num(q+1),num(q-1),num(q+2),num(b===q?q+3:b)],nfb(q,3,{},1),
+   `Think multiplication: ${b} ${TIMES} ? = ${a}. Since ${b} ${TIMES} ${q} = ${a}, the answer is ${q}.`);}],
+ [2,()=>{const to100=Math.random()<.45;let n;do{n=R(101,989);}while(to100?n%100===0:n%10===0);
+   const u=to100?100:10,a=Math.round(n/u)*u,other=a>n?a-u:a+u,alt=Math.round(n/(to100?10:100))*(to100?10:100),dg=u===10?n%10:Math.floor(n/10)%10;
+   return P(`Round <span class="eq">${n}</span> to the nearest <b>${u}</b>.`,'',num(a),[num(other),num(alt),num(a+u),num(a-u)],nfb(a,3,{step:u},0),
+   `Look at the ${u===10?'ones':'tens'} digit: ${dg}. ${dg>=5?'5 or more rounds up':'4 or less rounds down'}, so ${n} → ${a}.`);}],
+ [3,()=>{const d=pick([2,3,4,4,6,8]),k=R(1,d-1),col=pick(['#005A9C','#e53935','#FFB800']),isPie=Math.random()<.55,fig=isPie?pieSVG(k,d,col):barSVG(k,d,col);
+   const fb=()=>{const dd=pick([2,3,4,6,8]);return frac(R(1,dd-1),dd);};
+   return P(`What fraction of the ${isPie?'pizza':'bar'} is shaded?`,fig,frac(k,d),[frac(d-k,d),frac(k,d+1),k+1<d?frac(k+1,d):null,d-1>k?frac(k,d-1):null],fb,
+   `There are ${d} equal parts and ${k} ${plural(k,'is','are')} shaded, so it's ${k} out of ${d}.`);}],
+ [2,()=>{const w=R(2,10),h=R(2,8),A=w*h,U='sq units';
+   return P(`The infield tarp is a rectangle. What is its <b>area</b>?`,areaSVG(w,h),num(A,{unit:U}),[num(2*(w+h),{unit:U}),num(w+h,{unit:U}),num(A+w,{unit:U}),num(A-h,{unit:U})],nfb(A,6,{unit:U},1),
+   `Area = length ${TIMES} width = ${w} ${TIMES} ${h} = ${A} square units. (Count the squares!)`);}],
+ [3,()=>{const k=R(0,3);let a,b,ans,q,h,c;
+   if(k===0){a=R(3,9);b=R(3,9);ans=a*b;q=`The Dodgers dugout has ${a} rows of seats with ${b} seats in each row. How many seats?`;h=`${a} ${TIMES} ${b} = ${ans}.`;c=a+b;}
+   else if(k===1){b=R(3,9);ans=R(3,9);a=b*ans;q=`${a} playoff rally towels are shared equally by ${b} fans. How many towels does each fan get?`;h=`${a} ${DIV} ${b} = ${ans}.`;c=a-b;}
+   else if(k===2){a=R(4,9);b=R(3,6);ans=a*b;q=`A Dodgers pitcher throws ${a} strikes each inning. How many strikes in ${b} innings?`;h=`${b} ${TIMES} ${a} = ${ans}.`;c=a+b;}
+   else{b=R(2,6);ans=R(4,10);a=b*ans;q=`The Dodgers scored ${a} runs in ${b} playoff games, the same number each game. How many runs per game?`;h=`${a} ${DIV} ${b} = ${ans}.`;c=a-b;}
+   return P(q,'',num(ans),[num(c),num(ans+1),num(ans-1),num(ans+b)],nfb(ans,4,{},1),h,{long:true});}],
+];
+// ----- 4 : Mammoth Mountain -----
+const PLACES=['ones','tens','hundreds','thousands','ten thousands','hundred thousands','millions'];
+const noCarry=(a,b)=>Math.floor(a/10)*b*10+((a%10)*b)%10;
+G[4]=[
+ [3,()=>{const a=R(12,99),b=R(3,9),p=a*b;
+   return P(`<span class="eq">${a} ${TIMES} ${b} = ?</span>`,'',num(p),[num(noCarry(a,b)),num(p+10),num(p-10),num(p+b),num(p-b)],nfb(p,12,{},1),
+   `Break it apart: ${Math.floor(a/10)*10} ${TIMES} ${b} = ${Math.floor(a/10)*10*b} and ${a%10} ${TIMES} ${b} = ${(a%10)*b}. Add: ${p}.`);}],
+ [2,()=>{const a=R(12,45),b=R(12,29),p=a*b,t=Math.floor(b/10),o=b%10;
+   return P(`<span class="eq">${a} ${TIMES} ${b} = ?</span>`,'',num(p),[num(a*o+a*t),num(p+10),num(p-10),num(p+100),num(p+a)],nfb(p,20,{},1),
+   `${a} ${TIMES} ${o} = ${a*o} and ${a} ${TIMES} ${t*10} = ${a*t*10}. Add them: ${a*o} + ${a*t*10} = ${p}.`);}],
+ [3,()=>{const d=R(2,9),q=R(12,Math.floor(999/d)),r=Math.random()<.3?R(1,d-1):0,N=d*q+r;
+   const vis=`<div class="ldiv"><span class="dvs">${d}</span><span class="dvd">${N}</span></div>`;
+   if(r){const S=(a,b)=>str(`${a} R ${b}`,`${a}<small style="font-size:.6em;margin:0 .2em">R</small>${b}`);
+     return P(`What is ${N} ${DIV} ${d}?`,vis,S(q,r),[S(q+1,r),S(q-1,r),d>2?S(q,r%(d-1)+1):null,S(q+10,r),S(q,0)],()=>S(q+R(-3,3),R(1,d-1)),
+     `${d} ${TIMES} ${q} = ${d*q}. ${N} ${MINUS} ${d*q} = ${r} left over. So ${q} R ${r}.`);}
+   return P(`What is ${N} ${DIV} ${d}?`,vis,num(q),[num(q+1),num(q-1),num(q+10),num(q-10)],nfb(q,5,{},1),
+   `Divide step by step, then check: ${d} ${TIMES} ${q} = ${N}. ✔`);}],
+ [2,()=>{let b=R(2,6),a=R(1,b-1);while(gcd(a,b)>1)a=R(1,b-1);const k=R(2,5),x=a*k;
+   return P(`<span class="eq">${fracHTML(a,b)} = ${fracHTML('?',b*k)}</span>`,'',num(x),[num(a+k),num(x+1),num(x-1),num(b*k-a),num(a*b)],nfb(x,3,{},1),
+   `${b} ${TIMES} ${k} = ${b*k}, so multiply the top by ${k} too: ${a} ${TIMES} ${k} = ${x}.`);}],
+ [2,()=>{let b=R(2,6),a=R(1,b-1);while(gcd(a,b)>1)a=R(1,b-1);const k=R(2,4);
+   const fb=()=>{const m=R(3,12);return frac(R(1,m-1),m);};
+   return P(`Which fraction is equal to <span class="eq">${fracHTML(a,b)}</span>?`,'',frac(a*k,b*k),[frac(a+k,b+k),frac(a*k+1,b*k),frac(a,b*k),frac(a*k,b*k+k)],fb,
+   `Multiply the top and bottom by the same number: ${a} ${TIMES} ${k} = ${a*k}, ${b} ${TIMES} ${k} = ${b*k}.`);}],
+ [2,()=>{const d=R(3,12),a=R(1,d-2),b=R(1,d-a),sub=Math.random()<.3&&a!==b;
+   const top=sub?Math.max(a,b):a,bot=sub?Math.min(a,b):b,n=sub?top-bot:top+bot;
+   return P(`<span class="eq">${fracHTML(top,d)} ${sub?MINUS:'+'} ${fracHTML(bot,d)} = ?</span>`,'',frac(n,d),
+   [frac(n,d*2),frac(n+1,d),n>1?frac(n-1,d):null,frac(sub?top+bot:(Math.abs(top-bot)||d-1),d)],()=>frac(R(1,d+3),d),
+   `Same bottom number! Just ${sub?'subtract':'add'} the tops: ${top} ${sub?MINUS:'+'} ${bot} = ${n}. Keep ${d} on the bottom.${n===d?' That is 1 whole!':''}`);}],
+ [2,()=>{let dg=shuffle([0,1,2,3,4,5,6,7,8,9]).slice(0,7);if(dg[0]===0)[dg[0],dg[1]]=[dg[1],dg[0]];
+   let p;do{p=R(0,6);}while(dg[6-p]===0);const D=dg[6-p],v=D*10**p;
+   let idx=0;const shown=fmt(+dg.join('')).split('').map(ch=>{if(ch===',')return ch;const out=idx===6-p?`<span class="hl">${ch}</span>`:ch;idx++;return out;}).join('');
+   return P(`What is the value of the red digit?`,`<div class="bignum">${shown}</div>`,num(v),[num(D*10**(p+1)),p>0?num(D*10**(p-1)):null,num(D*10**(p+2)),p>0?num(D):null,p>1?num(D*10**(p-2)):null,num(D*10**(p+3))],()=>num(D*10**R(0,6)),
+   `The ${D} is in the ${PLACES[p]} place, so it is worth ${fmt(v)}.`);}],
+ [3,()=>{const k=R(0,3);let a,b,ans,q,h,c;
+   if(k===0){a=R(6,8);b=R(12,40);ans=a*b;q=`Each Mammoth gondola cabin holds ${a} skiers. How many skiers ride in ${b} cabins?`;h=`${b} ${TIMES} ${a} = ${ans}.`;c=noCarry(b,a);}
+   else if(k===1){b=R(3,7);ans=R(12,40);a=b*ans;q=`${a} skiers split evenly into ${b} ski-school groups. How many skiers are in each group?`;h=`${a} ${DIV} ${b} = ${ans}.`;c=ans+b;}
+   else if(k===2){a=R(12,36);b=R(3,6);ans=a*b;q=`Mammoth got ${a} inches of fresh powder each week for ${b} weeks. How many inches in all?`;h=`${a} ${TIMES} ${b} = ${ans}.`;c=a+b*10;}
+   else{a=R(13,28);b=R(11,19);ans=a*b;q=`${a} ski patrollers each put up ${b} trail signs on Mammoth. How many signs is that?`;h=`${a} ${TIMES} ${b} = ${ans}.`;c=a*(b%10)+a;}
+   return P(q,'',num(ans),[num(c),num(ans+10),num(ans-10),num(ans+b)],nfb(ans,9,{},1),h,{long:true});}],
+];
+// ----- 5 : USC Trojans Football -----
+const dec=(x,dp,o={})=>num(Math.round(x*10**dp)/10**dp,Object.assign({dp},o));
+G[5]=[
+ [3,()=>{const s=pick([10,100]),dp=s===10?1:2,A=R(s+1,s*40),B=R(s+1,s*30),sub=Math.random()<.45;
+   const [x,y]=sub?[Math.max(A,B),Math.min(A,B)]:[A,B],r=sub?x-y:x+y;
+   return P(`<span class="eq">${fmt(x/s,dp)} ${sub?MINUS:'+'} ${fmt(y/s,dp)} = ?</span>`,'',dec(r/s,dp),
+   [dec((r+1)/s,dp),r>1?dec((r-1)/s,dp):null,dec((r+s)/s,dp),r>s?dec((r-s)/s,dp):null,dec(r/s/10,dp+1),dec((sub?x+y:Math.abs(x-y))/s,dp)],()=>{const v=(r+R(-12,12))/s;return v<=0?null:dec(v,dp);},
+   `Line up the decimal points, then ${sub?'subtract':'add'} like whole numbers: ${fmt(r/s,dp)}.`);}],
+ [2,()=>{const t=Math.random()<.5;let A,B,ans,q,alt;
+   if(t){A=R(11,99);while(A%10===0)A=R(11,99);B=R(2,9);ans=A*B/10;q=`${fmt(A/10,1)} ${TIMES} ${B}`;alt=[A*B/100,A*B,(A*B+B)/10,(A*B-B)/10];}
+   else{A=R(2,9);B=R(2,9);ans=A*B/100;q=`${fmt(A/10,1)} ${TIMES} ${fmt(B/10,1)}`;alt=[A*B/10,A*B/1000,(A+B)/10,(A*B+1)/100];}
+   return P(`<span class="eq">${q} = ?</span>`,'',dec(ans,3),alt.map(v=>dec(v,3)),()=>{const v=ans+R(-9,9)/(t?10:100);return v>0?dec(v,3):null;},
+   t?`${A} ${TIMES} ${B} = ${A*B}. There is 1 decimal place in all, so ${fmt(ans,3)}.`:`${A} ${TIMES} ${B} = ${A*B}. There are 2 decimal places in all, so ${fmt(ans,3)}.`);}],
+ [4,()=>{const DS=[2,3,4,5,6,8,10,12];let d1,d2;do{d1=pick(DS);d2=pick(DS);}while(d1===d2||lcm(d1,d2)>24);
+   let n1=R(1,d1-1),n2=R(1,d2-1),sub=Math.random()<.4;const L=lcm(d1,d2);
+   if(sub&&n1*d2===n2*d1)sub=false;
+   if(sub&&n1/d1<n2/d2){[n1,n2]=[n2,n1];[d1,d2]=[d2,d1];}
+   const N=sub?n1*(L/d1)-n2*(L/d2):n1*(L/d1)+n2*(L/d2),o={reduce:true,mixed:true};
+   const fb=()=>{const m=R(-3,3);return N+m>0&&m?frac(N+m,L,o):null;};
+   const wrong1=sub?(n1>n2&&d1!==d2?frac(n1-n2,Math.abs(d1-d2),o):null):frac(n1+n2,d1+d2,o);
+   return P(`<span class="eq">${fracHTML(n1,d1)} ${sub?MINUS:'+'} ${fracHTML(n2,d2)} = ?</span>`,'',frac(N,L,o),
+   [wrong1,frac(sub?(Math.abs(n1-n2)||1):n1+n2,d1*d2,o),frac(N+1,L,o),N>1?frac(N-1,L,o):null],fb,
+   `Use a common denominator of ${L}: ${fracHTML(n1*(L/d1),L)} ${sub?MINUS:'+'} ${fracHTML(n2*(L/d2),L)} = ${fracHTML(N,L)}${gcd(N,L)>1||N>=L?' = '+frac(N,L,o).html:''}.`);}],
+ [2,()=>{const l=R(2,10),w=R(2,6),h=R(2,8),V=l*w*h,U='cubic units';
+   return P(`The Trojans' equipment trunk is a box. What is its <b>volume</b>?`,boxSVG(l,w,h),num(V,{unit:U}),
+   [num(l+w+h,{unit:U}),num(l*w+h,{unit:U}),num(2*(l*w+l*h+w*h),{unit:U}),num(l*w,{unit:U}),num(V+l*w,{unit:U})],nfb(V,8,{unit:U},1),
+   `Volume = length ${TIMES} width ${TIMES} height = ${l} ${TIMES} ${w} ${TIMES} ${h} = ${V} cubic units.`,{long:true});}],
+ [3,()=>{const t=R(0,4);let e,ans,wrong,h;const a=R(2,12),b=R(2,9),c=R(2,9);
+   if(t===0){e=`${a} + ${b} ${TIMES} ${c}`;ans=a+b*c;wrong=(a+b)*c;h=`Multiply first: ${b} ${TIMES} ${c} = ${b*c}. Then ${a} + ${b*c} = ${ans}.`;}
+   else if(t===1){e=`(${a} + ${b}) ${TIMES} ${c}`;ans=(a+b)*c;wrong=a+b*c;h=`Parentheses first: ${a} + ${b} = ${a+b}. Then ${a+b} ${TIMES} ${c} = ${ans}.`;}
+   else if(t===2){const x=R(3,9),y=R(3,9),z=R(1,x*y-1);e=`${x} ${TIMES} ${y} ${MINUS} ${z}`;ans=x*y-z;wrong=y>z?x*(y-z):ans+10;h=`Multiply first: ${x} ${TIMES} ${y} = ${x*y}. Then ${x*y} ${MINUS} ${z} = ${ans}.`;}
+   else if(t===3){const k=R(2,9),cc=R(2,5),bb=k*cc,aa=R(k+1,30);e=`${aa} ${MINUS} ${bb} ${DIV} ${cc}`;ans=aa-k;wrong=(aa>bb&&(aa-bb)%cc===0)?(aa-bb)/cc:aa+k;h=`Divide first: ${bb} ${DIV} ${cc} = ${k}. Then ${aa} ${MINUS} ${k} = ${ans}.`;}
+   else{const d=R(1,a*(b+c)-1);e=`${a} ${TIMES} (${b} + ${c}) ${MINUS} ${d}`;ans=a*(b+c)-d;wrong=a*b+c-d>0?a*b+c-d:ans+a;h=`Parentheses: ${b} + ${c} = ${b+c}. Multiply: ${a} ${TIMES} ${b+c} = ${a*(b+c)}. Subtract ${d}: ${ans}.`;}
+   return P(`<span class="eq">${e} = ?</span>`,'',num(ans),[num(wrong),num(ans+1),num(ans-1),num(ans+10)],nfb(ans,6,{},0),h);}],
+ [3,()=>{const k=R(0,3),n1=nm();let q,ans,h,c,unit='yards';
+   if(k===0){const A=R(51,299),B=R(21,199);ans=(A+B)/10;q=`The Trojans ran for ${fmt(A/10,1)} yards on one play and ${fmt(B/10,1)} yards on the next. How many yards in all?`;h=`${fmt(A/10,1)} + ${fmt(B/10,1)} = ${fmt(ans,1)}.`;c=[(A+B+10)/10,(A+B-1)/10,(A+B)/100];}
+   else if(k===1){const A=R(1000,4999),B=R(500,A-100);ans=(A-B)/100;q=`A Trojans jersey costs $${(A/100).toFixed(2)}. A cap costs $${(B/100).toFixed(2)}. How much more is the jersey?`;h=`$${(A/100).toFixed(2)} ${MINUS} $${(B/100).toFixed(2)} = $${ans.toFixed(2)}.`;c=[(A-B+100)/100,(A-B-10)/100,(A+B)/100];
+     const M=v=>str('$'+v.toFixed(2),'$'+v.toFixed(2),'n:'+Math.round(v*100));
+     return P(q,'',M(ans),c.map(M),()=>{const v=ans+R(-20,20)/10;return v>0?M(v):null;},h,{long:true});}
+   else if(k===2){const A=R(12,48),B=R(3,9);ans=A*B/10;unit='hours';q=`${n1}, the Trojans kicker, practices ${fmt(A/10,1)} hours a day. How many hours in ${B} days?`;h=`${fmt(A/10,1)} ${TIMES} ${B} = ${fmt(ans,1)}.`;c=[A*B/100,(A*B+10)/10,A*B];}
+   else{const A=R(301,599),B=R(201,A-20);ans=(A-B)/10;q=`A Trojans punt went ${fmt(A/10,1)} yards. A kickoff went ${fmt(B/10,1)} yards. How much farther did the punt go?`;h=`${fmt(A/10,1)} ${MINUS} ${fmt(B/10,1)} = ${fmt(ans,1)}.`;c=[(A+B)/10,(A-B+10)/10,(A-B-1)/10];}
+   return P(q,'',dec(ans,2,{unit}),c.map(v=>dec(v,2,{unit})),()=>{const v=ans+R(-15,15)/10;return v>0?dec(v,2,{unit}):null;},h,{long:true});}],
+];
+// ----- 6 : Trojans Championship -----
+G[6]=[
+ [2,()=>{let a=R(2,5),b=R(1,7);while(a===b)b=R(1,7);const k=R(2,6),ans=b*k,T=pick([['touchdowns','field goals','field goal'],['trumpets','drums','drum'],['passes','runs','run'],['cheerleaders','flags','flag']]);
+   return P(`For every ${a} ${T[0]}, there ${b===1?'is':'are'} ${b} ${b===1?T[2]:T[1]}. If there are ${a*k} ${T[0]}, how many ${T[1]} are there?`,'',num(ans),
+   [num(b+a*k-a),num(a*k),num(ans+b),num(ans-b),num(b*(k+1))],nfb(ans,4,{},1),`The ratio ${a}:${b} is scaled up ${k} times (${a} ${TIMES} ${k} = ${a*k}). So ${b} ${TIMES} ${k} = ${ans}.`,{long:true});}],
+ [2,()=>{const r=R(3,12),c=R(2,9),Y=r*c;
+   return P(`A Trojans running back gained ${Y} yards on ${c} carries. How many yards <b>per carry</b>?`,'',num(r,{unit:'yards'}),
+   [num(r+1,{unit:'yards'}),num(r-1,{unit:'yards'}),num(Y-c,{unit:'yards'}),num(Y+c,{unit:'yards'}),num(c,{unit:'yards'})],nfb(r,3,{unit:'yards'},1),`Unit rate: ${Y} ${DIV} ${c} = ${r} yards per carry.`,{long:true});}],
+ [1,()=>{const p=R(3,9);let n1=R(2,6),n2=R(2,9);while(n1===n2)n2=R(2,9);const ans=p*n2;
+   return P(`${n1} foam fingers cost $${p*n1}. At the same price, how much do ${n2} foam fingers cost?`,'',num(ans,{pre:'$'}),
+   [num(p*n1+n2,{pre:'$'}),num(ans+p,{pre:'$'}),num(ans-p,{pre:'$'}),num(p*n1*n2,{pre:'$'})],nfb(ans,5,{pre:'$'},1),`One costs $${p*n1} ${DIV} ${n1} = $${p}. Then ${n2} ${TIMES} $${p} = $${ans}.`,{long:true});}],
+ [3,()=>{const p=pick([10,20,25,50,75,5,30,40,60,80,90,15]),u=100/gcd(p,100),base=u*R(1,Math.max(1,Math.floor(400/u))),ans=p*base/100;
+   return P(`What is <span class="eq">${p}%</span> of <span class="eq">${base}</span>?`,'',num(ans),[num(base-ans),num(ans*2),num(ans/2),num(p),num(ans+base/10),num(ans+5)],nfb(ans,6,{},0),
+   `${p}% means ${p} out of 100. ${base} ${TIMES} ${p} ${DIV} 100 = ${fmt(ans)}.`);}],
+ [2,()=>{let t,made,pc;do{t=pick([4,5,10,20,25,50,8,40]);made=R(1,t-1);pc=made*100/t;}while(!Number.isInteger(pc));
+   return P(`The Trojans made ${made} of ${t} field goals this season. What <b>percent</b> did they make?`,'',num(pc,{suf:'%'}),
+   [num(100-pc,{suf:'%'}),num(made,{suf:'%'}),num(pc+10,{suf:'%'}),num(pc-5,{suf:'%'})],nfb(pc,10,{suf:'%',step:5},0),`${made} out of ${t} = ${fmt(made/t)} = ${fmt(pc)} out of 100 = ${fmt(pc)}%.`,{long:true});}],
+ [3,()=>{let a=R(-12,12),b=R(-12,12);if(!a)a=-5;if(!b)b=7;if(a>0&&b>0)a=-a;const op=pick(['+',MINUS,TIMES]);
+   const ans=op==='+'?a+b:op===MINUS?a-b:a*b;
+   const c=op==='+'?[a-b,-(a+b),Math.abs(a)+Math.abs(b)]:op===MINUS?[a+b,-(a-b),Math.abs(a)+Math.abs(b)]:[-(a*b),a+b,a*b+(a*b>0?-1:1)*Math.abs(a)];
+   const h=op==='+'?`Start at ${fmt(a)} on the number line and move ${b<0?'left':'right'} ${Math.abs(b)}: ${fmt(ans)}.`:
+     op===MINUS?`Subtracting is adding the opposite: ${fmt(a)} + ${sn(-b)} = ${fmt(ans)}.`:`${(a<0)!==(b<0)?'Different signs → negative':'Same signs → positive'}: ${Math.abs(a)} ${TIMES} ${Math.abs(b)} = ${Math.abs(ans)}, so ${fmt(ans)}.`;
+   return P(`<span class="eq">${fmt(a)} ${op} ${sn(b)} = ?</span>`,'',num(ans),c.map(v=>num(v)),nfb(ans,4,{},-1000),h,{neg:true});}],
+ [1,()=>{const l=R(2,12),g=R(2,20),ans=g-l;
+   return P(`The Trojans lost ${l} yards on 1st down, then gained ${g} yards on 2nd down. What is the total change in yards?`,'',num(ans),[num(l+g),num(-ans),num(-(l+g)),num(ans+2)],nfb(ans,4,{},-100),
+   `A loss is negative: ${MINUS}${l} + ${g} = ${fmt(ans)}.`,{long:true,neg:true});}],
+ [3,()=>{const t=R(0,3);let e,ans,c,h;const X='<i>x</i>';
+   if(t===0){const a=R(2,20),x=R(1,30),b=x+a;e=`${X} + ${a} = ${b}`;ans=x;c=[b+a,x+1,x-1,b];h=`Subtract ${a} from both sides: ${X} = ${b} ${MINUS} ${a} = ${x}.`;}
+   else if(t===1){const a=R(2,20),x=R(a+1,40),b=x-a;e=`${X} ${MINUS} ${a} = ${b}`;ans=x;c=[b-a,x+1,x-1,b];h=`Add ${a} to both sides: ${X} = ${b} + ${a} = ${x}.`;}
+   else if(t===2){const a=R(2,12),x=R(2,12),b=a*x;e=`${a}${X} = ${b}`;ans=x;c=[b-a,b+a,x+1,x-1];h=`Divide both sides by ${a}: ${X} = ${b} ${DIV} ${a} = ${x}.`;}
+   else{const a=R(2,9),b=R(2,12),x=a*b;e=`${fracHTML(X,a)} = ${b}`;ans=x;c=[b+a,b-a,x+a,x-a];h=`Multiply both sides by ${a}: ${X} = ${b} ${TIMES} ${a} = ${x}.`;}
+   return P(`Solve for ${X}:<br><span class="eq">${e}</span>`,'',num(ans),c.map(v=>num(v)),nfb(ans,4,{},0),h);}],
+ [2,()=>{const [b,e]=pick([[2,R(2,6)],[3,R(2,4)],[4,R(2,3)],[5,R(2,3)],[10,R(2,5)],[R(6,9),2],[R(11,12),2],[2,R(7,8)]]),ans=b**e;
+   return P(`<span class="eq">${b}<sup>${e}</sup> = ?</span>`,'',num(ans),[num(b*e),num(b**(e-1)),num(e**b),num(b+e),num(b**(e+1))],nfb(ans,5,{},1),
+   `${b}<sup>${e}</sup> means ${Array(e).fill(b).join(` ${TIMES} `)} = ${fmt(ans)}.`);}],
+ [2,()=>{const n=pick([4,5]);let vals,ok;do{const m=R(10,40);vals=[];let s=0;for(let i=0;i<n-1;i++){const d=R(-9,9);vals.push(m+d);s+=d;}vals.push(m-s);ok=Math.abs(s)<=12&&vals.every(v=>v>0);}while(!ok);
+   const sum=vals.reduce((a,b)=>a+b,0),m=sum/n,so=vals.slice().sort((a,b)=>a-b),med=n%2?so[2]:(so[1]+so[2])/2;
+   return P(`Trojans points in ${n} games. What is the <b>mean</b> (average)?`,chips(vals,'Game'),num(m),[num(med),num(m+1),num(m-1),num(so[n-1]-so[0]),num(m+2)],nfb(m,3,{},1),
+   `Add them: ${vals.join(' + ')} = ${sum}. Divide by ${n}: ${sum} ${DIV} ${n} = ${m}.`);}],
+];
+function genProblem(g){const list=G[g],tot=list.reduce((s,x)=>s+x[0],0);let r=Math.random()*tot;for(const [w,f] of list){if((r-=w)<0)return f();}return list[0][1]();}
+// ================= WORLDS =================
+const WORLDS=[
+ {g:0,grade:'K',gname:'Kindergarten',sport:'boogie',name:'Boogie Board Beach',sub:'SoCal beach day',emoji:'🌊',color:'#00A6D6',dark:'#00708f',
+  win:'GNARLY WAVE!',winSub:'You rode it all the way to the sand! 🏖️',label:'Catch the wave!',conf:['#00B4D8','#FFD166','#FF6B6B','#ffffff'],
+  good:['Cowabunga!','Nice ride!','Radical!','Wave caught!','Stoked!'],bad:'Wiped out — paddle back out!'},
+ {g:1,grade:'1',gname:'Grade 1',sport:'surf',name:'Malibu Surf Break',sub:'Hang ten at sunset',emoji:'🏄',color:'#F2672E',dark:'#b8481a',
+  win:'GNARLY WAVE!',winSub:'Hang ten, surf champ! 🤙',label:'Ride the wave!',conf:['#FF7A45','#FFD166','#00B4D8','#ffffff'],
+  good:['Hang ten!','Tubular!','Shaka! 🤙','Totally gnarly!','Epic ride!'],bad:'Wiped out — paddle back out!'},
+ {g:2,grade:'2',gname:'Grade 2',sport:'baseball',name:'Dodgers Baseball',sub:'Dodger Stadium · Chavez Ravine',emoji:'⚾',color:'#005A9C',dark:'#003a66',
+  win:'HOME RUN!',winSub:'Dodger blue all the way! 💙',label:'Go Dodgers!',conf:['#005A9C','#ffffff','#EF3E42','#8fd0ff']},
+ {g:3,grade:'3',gname:'Grade 3',sport:'baseball',variant:'playoffs',name:'Dodgers October',sub:'Playoff night in Chavez Ravine',emoji:'🏟️',color:'#0B3D91',dark:'#06245a',
+  win:'HOME RUN!',winSub:'Walk-off winner in October! 💙⚾',label:'Playoff baseball!',conf:['#005A9C','#ffffff','#FFCC00','#8fd0ff']},
+ {g:4,grade:'4',gname:'Grade 4',sport:'ski',name:'Mammoth Mountain',sub:'Eastern Sierra powder day',emoji:'⛷️',color:'#2F6FDE',dark:'#1d4799',
+  win:'FRESH POWDER!',winSub:'You conquered Mammoth Mountain! 🏔️',label:'Ski the run!',conf:['#ffffff','#2F6FDE','#1FAF5A','#111111','#8fd0ff'],
+  good:['Fresh tracks!','Nice carve!','Shredding it!','Powder day!','Smooth turns!'],bad:'Wipeout! Brush off the snow.'},
+ {g:5,grade:'5',gname:'Grade 5',sport:'football',name:'USC Trojans Football',sub:'Game day at the Coliseum',emoji:'🏈',color:'#990000',dark:'#5c0000',
+  win:'TOUCHDOWN!',winSub:'Fight On, Trojan! ✌️',label:'Fight On!',conf:['#990000','#FFCC00','#ffffff']},
+ {g:6,grade:'6',gname:'Grade 6',sport:'football',variant:'champ',name:'Trojans Championship',sub:'Title game · LA Coliseum',emoji:'🏆',color:'#7a0000',dark:'#3d0000',
+  win:'CHAMPIONS!',winSub:'TOUCHDOWN! Fight On! 🏆',label:'Title game!',conf:['#990000','#FFCC00','#ffffff','#ffe680']},
+];
+WORLDS.forEach(w=>{if(w.sport==='football'){w.good=['First down!','Big gain!','Fight On!','Great catch!','Trojan power!'];}});
+
+// ================= SCENES (all art drawn here, no logos) =================
+let UID=0;
+function palm(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})" fill="${c}"><path d="M-3 0 Q2 -40 8 -80 L12 -80 Q7 -40 3 0Z"/><path d="M10 -80 q-30 -10 -48 6 q24 -18 48 -2z M10 -80 q30 -12 48 4 q-26 -16 -48 0z M10 -80 q-14 -24 -40 -22 q26 4 40 24z M10 -80 q16 -26 42 -20 q-28 2 -42 22z M10 -80 q2 -26 -8 -40 q14 16 10 40z"/></g>`;}
+function crowd(u,c1,c2,c3){return `<pattern id="${u}cr" width="18" height="14" patternUnits="userSpaceOnUse"><rect width="18" height="14" fill="${c1}"/><circle cx="4" cy="5" r="3" fill="${c2}"/><circle cx="13" cy="9" r="3" fill="${c3}"/><circle cx="9" cy="2" r="2" fill="${c3}" opacity=".6"/></pattern>`;}
+function helmet(c,stripe){return `<g><path d="M-28,12 C-34,-18 -12,-34 10,-31 C28,-28 35,-12 33,6 L15,8 L11,19 L-20,21 Z" fill="${c}" stroke="#2a0000" stroke-width="2.5"/>
+ <path d="M-27,-2 C-25,-22 -6,-31 12,-28" fill="none" stroke="${stripe}" stroke-width="6" stroke-linecap="round"/>
+ <circle cx="-5" cy="3" r="4.5" fill="#2a0000"/><path d="M15,8 L37,8 M37,8 L37,22 M13,15 L37,15 M26,8 L26,22 M15,22 L37,22" stroke="#ccc" stroke-width="3" stroke-linecap="round" fill="none"/></g>`;}
+function footballBall(x,y){return `<g transform="translate(${x},${y})"><ellipse rx="15" ry="9" fill="#8B4513" stroke="#4a2308" stroke-width="2"/><path d="M-6 0 H6 M-4 -3 V3 M0 -3 V3 M4 -3 V3" stroke="#fff" stroke-width="1.8"/></g>`;}
+function sceneFootball(w,u){
+  const champ=w.variant==='champ';let s='';
+  for(let i=0;i<10;i++)s+=`<rect x="${90+i*82}" y="52" width="82" height="148" fill="${i%2?'#2f9a42':'#36a94a'}"/>`;
+  for(let yd=0;yd<=100;yd+=5){const x=90+yd*8.2;s+=`<line x1="${x}" y1="52" x2="${x}" y2="200" stroke="#fff" stroke-opacity="${yd%10?0.35:0.85}" stroke-width="${yd===50?4:2}"/>`;}
+  for(let yd=10;yd<100;yd+=10){const x=90+yd*8.2;s+=`<text x="${x}" y="192" text-anchor="middle" font-size="18" font-weight="900" fill="#fff" fill-opacity=".9" font-family="Arial">${yd<=50?yd:100-yd}</text>`;}
+  let arches='';for(let i=0;i<11;i++){const x=345+i*29;arches+=`<path d="M${x} 46 V26 a10 10 0 0 1 20 0 V46Z" fill="${champ?'#2a0a0a':'#6b3a1a'}" opacity=".85"/>`;}
+  let lights='';if(champ)for(let i=0;i<16;i++)lights+=`<circle cx="${(i*67+23)%1000}" cy="${6+(i*13)%10}" r="${1+i%3}" fill="#FFCC00" opacity=".9"/>`;
+  return `<svg viewBox="0 0 1000 200" preserveAspectRatio="xMidYMax slice"><defs>${crowd(u,champ?'#3d0000':'#7a0000','#FFCC00','#fff')}
+  <linearGradient id="${u}sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${champ?'#10163a':'#6fc6ff'}"/><stop offset="1" stop-color="${champ?'#3a1d5c':'#c9ecff'}"/></linearGradient></defs>
+  <rect width="1000" height="200" fill="url(#${u}sky)"/>
+  <rect y="14" width="1000" height="40" fill="url(#${u}cr)"/>
+  <rect x="330" y="2" width="340" height="48" rx="4" fill="${champ?'#d9b25a':'#ecd6a6'}"/>${arches}
+  <text x="500" y="17" text-anchor="middle" font-size="12" font-weight="900" fill="#5c0000" font-family="Arial" letter-spacing="3">${champ?'★ CHAMPIONSHIP GAME ★':'THE COLISEUM'}</text>
+  ${lights}${s}
+  <rect x="0" y="52" width="90" height="148" fill="#990000"/><rect x="910" y="52" width="90" height="148" fill="#FFCC00"/>
+  <text transform="translate(55 126) rotate(-90)" text-anchor="middle" font-size="22" font-weight="900" fill="#FFCC00" font-family="Arial" letter-spacing="2">TROJANS</text>
+  <text transform="translate(955 126) rotate(90)" text-anchor="middle" font-size="20" font-weight="900" fill="#990000" font-family="Arial" letter-spacing="1">FIGHT ON!</text>
+  <line id="${u}los" x1="254" y1="52" x2="254" y2="200" stroke="#2a7fff" stroke-width="4"/>
+  <line id="${u}fd" x1="320" y1="52" x2="320" y2="200" stroke="#FFE600" stroke-width="4"/>
+  <g id="${u}ply" transform="translate(214,125)"><g class="bob">${helmet('#990000','#FFCC00')}${footballBall(54,8)}</g></g></svg>`;
+}
+const BPTS=[[500,188],[650,142],[500,104],[350,142],[500,188]];
+function sceneBaseball(w,u){
+  const po=w.variant==='playoffs',[H,B1,B2,B3]=BPTS;
+  const base=p=>`<rect x="${p[0]-7}" y="${p[1]-7}" width="14" height="14" fill="#fff" transform="rotate(45 ${p[0]} ${p[1]})" stroke="#ccc"/>`;
+  let lights='';if(po)for(let i=0;i<6;i++){const x=80+i*168;lights+=`<g><rect x="${x-2}" y="8" width="4" height="30" fill="#333"/><rect x="${x-16}" y="2" width="32" height="10" rx="2" fill="#fff9c4"/><circle cx="${x}" cy="7" r="24" fill="#fff9c4" opacity=".18"/></g>`;}
+  const pc=po?'#1b1330':'#2f5a2a';
+  return `<svg viewBox="0 0 1000 200" preserveAspectRatio="xMidYMax slice"><defs>${crowd(u,'#004a80','#fff','#8fd0ff')}
+  <linearGradient id="${u}sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${po?'#1a1446':'#4fb6ff'}"/><stop offset=".7" stop-color="${po?'#ff8a5c':'#bfe8ff'}"/></linearGradient>
+  <radialGradient id="${u}grass" cx=".5" cy="1" r=".9"><stop offset="0" stop-color="#3fb34f"/><stop offset="1" stop-color="#2a8a3a"/></radialGradient></defs>
+  <rect width="1000" height="200" fill="url(#${u}sky)"/>
+  <path d="M0 60 Q120 20 260 46 T520 40 T780 34 T1000 50 V80 H0Z" fill="${po?'#3b2f4a':'#9c8a5a'}"/>
+  <path d="M0 64 Q160 36 300 58 T600 52 T1000 60 V90 H0Z" fill="${po?'#2d3b2d':'#6f9b4a'}"/>
+  ${palm(40,86,.75,pc)}${palm(960,84,.7,pc)}${palm(905,90,.55,pc)}${lights}
+  <path d="M60 92 Q500 30 940 92 L940 104 Q500 44 60 104Z" fill="url(#${u}cr)"/>
+  <path d="M40 96 Q500 30 960 96" fill="none" stroke="#fff" stroke-width="3"/>
+  <path d="M120 70 l20 -14 l20 14 l20 -14 l20 14 M800 70 l20 -14 l20 14 l20 -14 l20 14" fill="none" stroke="#fff" stroke-width="4" opacity=".9"/>
+  ${po?'<text x="500" y="30" text-anchor="middle" font-size="18" font-weight="900" fill="#FFCC00" font-family="Arial" letter-spacing="4">★ OCTOBER BASEBALL ★</text>':''}
+  <path d="M60 104 Q500 44 940 104 L1000 200 H0Z" fill="url(#${u}grass)"/>
+  <path d="M60 104 Q500 44 940 104" fill="none" stroke="#005A9C" stroke-width="6"/>
+  <polygon points="${H[0]},${H[1]+12} ${B1[0]+40},${B1[1]} ${B2[0]},${B2[1]-28} ${B3[0]-40},${B3[1]}" fill="#c98a54"/>
+  <polygon points="${H[0]},${H[1]-12} ${B1[0]-16},${B1[1]} ${B2[0]},${B2[1]+12} ${B3[0]+16},${B3[1]}" fill="#3fb34f"/>
+  <ellipse cx="500" cy="146" rx="18" ry="7" fill="#c98a54"/>
+  <path d="M${H[0]} ${H[1]} L${B1[0]} ${B1[1]} L${B2[0]} ${B2[1]} L${B3[0]} ${B3[1]}Z" fill="none" stroke="#fff" stroke-width="2.5" opacity=".9"/>
+  ${base(B1)}${base(B2)}${base(B3)}<polygon points="${H[0]-7},${H[1]-4} ${H[0]+7},${H[1]-4} ${H[0]+7},${H[1]+2} ${H[0]},${H[1]+7} ${H[0]-7},${H[1]+2}" fill="#fff"/>
+  <g id="${u}runners"></g>
+  <circle id="${u}ball" cx="${H[0]}" cy="${H[1]}" r="6" fill="#fff" stroke="#e53935" stroke-width="1.5" opacity="0"/>
+  <g transform="translate(780,118)"><rect width="200" height="74" rx="10" fill="#0b2a4a" stroke="#fff" stroke-width="3"/>
+   <text x="100" y="21" text-anchor="middle" font-size="15" font-weight="900" fill="#fff" font-family="Arial" letter-spacing="2">DODGERS</text>
+   <text x="14" y="45" font-size="13" font-weight="900" fill="#8fd0ff" font-family="Arial">RUNS</text><text id="${u}runs" x="14" y="67" font-size="22" font-weight="900" fill="#FFCC00" font-family="Arial">0</text>
+   <text x="72" y="45" font-size="13" font-weight="900" fill="#8fd0ff" font-family="Arial">INN</text><text id="${u}inn" x="72" y="67" font-size="22" font-weight="900" fill="#fff" font-family="Arial">1</text>
+   <text x="128" y="45" font-size="13" font-weight="900" fill="#8fd0ff" font-family="Arial">OUTS</text><g id="${u}outs"></g></g></svg>`;
+}
+function skier(){return `<g><line x1="-24" y1="3" x2="24" y2="-2" stroke="#111" stroke-width="4" stroke-linecap="round"/>
+ <path d="M-6 0 L-2 -14 L6 -14 L6 0" stroke="#1d2a44" stroke-width="6" fill="none" stroke-linecap="round"/>
+ <rect x="-8" y="-32" width="16" height="20" rx="6" fill="#e53935" transform="rotate(12 0 -22)"/>
+ <circle cx="4" cy="-38" r="7.5" fill="#ffd9b3"/><path d="M-4 -40 a8 8 0 0 1 16 0z" fill="#2F6FDE"/><rect x="2" y="-41" width="11" height="4" rx="2" fill="#FFCC00"/>
+ <line x1="8" y1="-24" x2="22" y2="0" stroke="#555" stroke-width="2.5"/><line x1="-6" y1="-24" x2="-18" y2="0" stroke="#555" stroke-width="2.5"/></g>`;}
+function tree(x,y,s){return `<g transform="translate(${x},${y}) scale(${s})"><rect x="-3" y="-6" width="6" height="10" fill="#5a3b1a"/><polygon points="0,-46 -16,-6 16,-6" fill="#1f5a3a"/><polygon points="0,-46 -8,-26 8,-26" fill="#fff"/></g>`;}
+const skiY=x=>62+x*0.118;
+function sceneSki(w,u){
+  let trees='';[[30,120,.9],[70,150,1.1],[20,180,1],[120,190,.9],[330,198,.8],[360,194,.6],[860,112,.8],[900,125,1],[960,118,.85]].forEach(t=>trees+=tree(...t));
+  let chairs='',towers='';for(let i=0;i<4;i++){const x=640+i*110,y=150-(x-600)*0.3158;towers+=`<rect x="${x-3}" y="${y}" width="6" height="${Math.min(60,skiY(x)-y+30)}" fill="#555"/><rect x="${x-12}" y="${y-2}" width="24" height="5" fill="#555"/>`;}
+  for(let i=0;i<7;i++){const x=615+i*55,y=150-(x-600)*0.3158+2;chairs+=`<g transform="translate(${x},${y})"><line y2="14" stroke="#333" stroke-width="2"/><rect x="-9" y="12" width="18" height="6" rx="2" fill="#2F6FDE"/></g>`;}
+  const sign=(x,shape)=>`<g transform="translate(${x},${skiY(x)+26})"><rect x="-2" y="-30" width="4" height="30" fill="#6b4a2a"/><rect x="-15" y="-52" width="30" height="24" rx="4" fill="#fff" stroke="#333" stroke-width="2"/>${shape}</g>`;
+  return `<svg viewBox="0 0 1000 200" preserveAspectRatio="xMidYMax slice"><defs>
+  <linearGradient id="${u}sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a6fd6"/><stop offset="1" stop-color="#bfe4ff"/></linearGradient>
+  <linearGradient id="${u}snow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d9ecff"/></linearGradient></defs>
+  <rect width="1000" height="200" fill="url(#${u}sky)"/>
+  <g class="cloud"><ellipse cx="160" cy="30" rx="40" ry="12" fill="#fff" opacity=".8"/><ellipse cx="620" cy="22" rx="55" ry="13" fill="#fff" opacity=".7"/></g>
+  <polygon points="0,110 70,60 110,80 170,30 230,70 280,42 350,90 420,36 470,64 540,20 600,70 660,40 720,76 790,28 850,66 910,44 1000,90 1000,200 0,200" fill="#7c8aa3"/>
+  <polygon points="0,110 70,60 110,80 170,30 230,70 280,42 350,90 420,36 470,64 540,20 600,70 660,40 720,76 790,28 850,66 910,44 1000,90 1000,200 0,200" fill="#5d6b85" opacity=".35" transform="translate(30,14)"/>
+  <polygon points="70,60 56,74 68,72 80,78 90,70 110,80" fill="#fff"/><polygon points="170,30 145,56 160,50 172,60 190,48 208,56 230,70" fill="#fff"/>
+  <polygon points="280,42 262,62 276,58 290,64 304,56 350,90" fill="#fff"/><polygon points="420,36 395,64 412,58 426,66 446,54 470,64" fill="#fff"/>
+  <polygon points="540,20 510,56 528,48 544,58 566,46 600,70" fill="#fff"/><polygon points="660,40 640,62 656,56 670,64 690,56 720,76" fill="#fff"/>
+  <polygon points="790,28 764,60 782,52 798,62 826,50 850,66" fill="#fff"/><polygon points="910,44 890,64 906,58 920,66 940,58 1000,90" fill="#fff"/>
+  <line x1="300" y1="80" x2="540" y2="22" stroke="#444" stroke-width="1.5"/>
+  <g transform="translate(430,49)"><line y1="-2" y2="8" stroke="#333" stroke-width="2"/><rect x="-11" y="8" width="22" height="18" rx="5" fill="#e53935"/><rect x="-7" y="11" width="14" height="7" rx="2" fill="#bfe4ff"/></g>
+  <path d="M0 ${skiY(0)} L1000 ${skiY(1000)} L1000 200 L0 200Z" fill="url(#${u}snow)"/>
+  <path d="M0 ${skiY(0)} L1000 ${skiY(1000)}" stroke="#a9cdf0" stroke-width="3"/>
+  <line x1="600" y1="150" x2="1000" y2="23.7" stroke="#333" stroke-width="2"/>${towers}${chairs}
+  ${trees}
+  ${sign(230,'<circle cy="-40" r="8" fill="#1FAF5A"/>')}${sign(500,'<rect x="-8" y="-48" width="16" height="16" fill="#2F6FDE"/>')}${sign(770,'<rect x="-7" y="-47" width="14" height="14" fill="#111" transform="rotate(45 0 -40)"/>')}
+  <g transform="translate(412,156)"><rect width="176" height="34" rx="9" fill="#1d2a44" opacity=".88"/><text x="88" y="23" text-anchor="middle" font-size="17" font-weight="900" fill="#fff" font-family="Arial">▲ MAMMOTH MTN</text></g>
+  <g transform="translate(940,176)"><rect x="-30" y="-24" width="60" height="26" fill="#8b5a2b"/><polygon points="-36,-24 0,-44 36,-24" fill="#5a3b1a"/><polygon points="-36,-24 0,-44 36,-24" fill="#fff" opacity=".85" transform="translate(0,-3) scale(1,.6)"/><rect x="-6" y="-14" width="12" height="16" fill="#FFCC00"/></g>
+  <g id="${u}ply" transform="translate(60,${skiY(60)})"><g class="bob">${skier()}</g></g></svg>`;
+}
+function surfer(boogie){
+  if(boogie) return `<g><rect x="-30" y="-6" width="56" height="12" rx="6" fill="#FF3D7F" stroke="#8a0033" stroke-width="2"/><rect x="-30" y="-2" width="56" height="3" fill="#FFD166"/>
+   <path d="M-26 -8 Q-4 -18 16 -12" stroke="#1d2a44" stroke-width="10" fill="none" stroke-linecap="round"/><circle cx="22" cy="-14" r="8" fill="#b9794a"/><path d="M14 -18 a8 8 0 0 1 16 0z" fill="#3b2412"/>
+   <path d="M-28 -8 l-10 -6 M-28 -8 l-10 2" stroke="#1FAF5A" stroke-width="5" stroke-linecap="round"/><path d="M14 -10 l10 8" stroke="#b9794a" stroke-width="4" stroke-linecap="round"/></g>`;
+  return `<g><ellipse cx="0" cy="0" rx="36" ry="7" fill="#FFD166" stroke="#b07d00" stroke-width="2"/><path d="M-30 0 H30" stroke="#FF7A45" stroke-width="3"/>
+   <path d="M-10 -2 L-4 -20 L6 -20 L12 -2" stroke="#1d2a44" stroke-width="6" fill="none" stroke-linecap="round"/>
+   <rect x="-7" y="-40" width="14" height="22" rx="6" fill="#00A6D6" transform="rotate(-8 0 -30)"/>
+   <path d="M-6 -34 L-26 -40 M6 -34 L26 -28" stroke="#b9794a" stroke-width="5" stroke-linecap="round"/>
+   <circle cx="2" cy="-47" r="7.5" fill="#b9794a"/><path d="M-6 -50 a8 8 0 0 1 16 -2 l-4 2z" fill="#f2c14e"/></g>`;
+}
+const waveY=x=>150-72*Math.pow(Math.min(x,860)/860,1.6);
+function sceneSurf(w,u){
+  const boogie=w.sport==='boogie';
+  let crest='M0 150';for(let x=0;x<=860;x+=20)crest+=` L${x} ${waveY(x).toFixed(1)}`;
+  const face=crest+' C890 72 930 90 918 112 C906 128 880 120 884 104 C888 96 900 100 900 106 C930 140 960 150 1000 160 L1000 200 L0 200Z';
+  const pc=boogie?'#2f6b2a':'#5a2a3a';
+  return `<svg viewBox="0 0 1000 200" preserveAspectRatio="xMidYMax slice"><defs>
+  <linearGradient id="${u}sky" x1="0" y1="0" x2="0" y2="1">${boogie?'<stop offset="0" stop-color="#38b6ff"/><stop offset="1" stop-color="#d7f3ff"/>':'<stop offset="0" stop-color="#ff7eb3"/><stop offset=".55" stop-color="#ffb36b"/><stop offset="1" stop-color="#ffe29a"/>'}</linearGradient>
+  <linearGradient id="${u}wave" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34d1e0"/><stop offset="1" stop-color="#0a5f9e"/></linearGradient></defs>
+  <rect width="1000" height="200" fill="url(#${u}sky)"/>
+  <circle cx="${boogie?860:640}" cy="${boogie?40:62}" r="${boogie?26:34}" fill="${boogie?'#FFE066':'#fff3b0'}"/>
+  <g class="cloud"><ellipse cx="200" cy="30" rx="44" ry="12" fill="#fff" opacity=".8"/><ellipse cx="520" cy="24" rx="36" ry="10" fill="#fff" opacity=".7"/></g>
+  <rect y="86" width="1000" height="30" fill="${boogie?'#1b8fd1':'#e0766a'}" opacity=".55"/>
+  <g opacity=".75"><rect x="120" y="76" width="300" height="5" fill="#6b4a3a"/>${Array.from({length:13},(_,i)=>`<rect x="${124+i*24}" y="80" width="3" height="16" fill="#6b4a3a"/>`).join('')}<rect x="380" y="64" width="26" height="12" fill="#6b4a3a"/></g>
+  ${palm(30,120,.9,pc)}${palm(75,126,.7,pc)}
+  <g class="wave-move"><path d="${face}" fill="url(#${u}wave)"/>
+  <path d="${crest} C890 72 930 90 918 112" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".95"/>
+  <path d="M40 180 Q120 170 200 180 T360 180 T520 180 T680 180 T840 180" fill="none" stroke="#fff" stroke-width="3" opacity=".5"/></g>
+  <path d="M0 190 Q60 178 140 186 L140 200 L0 200Z" fill="#f4d58d"/>
+  <g transform="translate(160,186)"><path d="M0 0 L0 -30" stroke="#fff" stroke-width="3"/><path d="M-22 -28 Q0 -46 22 -28Z" fill="${boogie?'#FF3D7F':'#00A6D6'}"/></g>
+  <g id="${u}ply" transform="translate(80,${waveY(80)+18})"><g class="bob">${surfer(boogie)}</g></g></svg>`;
+}
+function sceneSVG(w,u){return w.sport==='football'?sceneFootball(w,u):w.sport==='baseball'?sceneBaseball(w,u):w.sport==='ski'?sceneSki(w,u):sceneSurf(w,u);}
+function placeAt(root,w,u,t){
+  const g=root.querySelector('#'+u+'ply');
+  if(w.sport==='football'){const yd=20+80*t,x=90+yd*8.2;if(g)g.setAttribute('transform',`translate(${x-40},125)`);
+    const los=root.querySelector('#'+u+'los'),fd=root.querySelector('#'+u+'fd');if(los){los.setAttribute('x1',x);los.setAttribute('x2',x);}
+    if(fd){const f=Math.min(910,x+10*8.2);fd.setAttribute('x1',f);fd.setAttribute('x2',f);fd.style.opacity=t>=.99?0:1;}}
+  else if(w.sport==='ski'){const x=60+860*t,y=skiY(x)-2+Math.sin(t*Math.PI*10)*4;if(g)g.setAttribute('transform',`translate(${x},${y}) rotate(${6.7+Math.cos(t*Math.PI*10)*8}) scale(1.2)`);}
+  else if(w.sport==='surf'||w.sport==='boogie'){const x=80+740*t,y=waveY(x)+18;if(g)g.setAttribute('transform',`translate(${x},${y}) rotate(${-8*t}) scale(1.3)`);}
+}
+function tween(dur,fn,done){const t0=performance.now();const f=now=>{let t=Math.min(1,(now-t0)/dur);fn(t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2);if(t<1)requestAnimationFrame(f);else if(done)done();};requestAnimationFrame(f);}
+function bpt(p){p=Math.max(0,Math.min(4,p));const i=Math.min(3,Math.floor(p)),f=p-i,a=BPTS[i],b=BPTS[i+1];return [a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f];}
+function runnerSVG(x,y){return `<g transform="translate(${x},${y})"><ellipse cy="10" rx="9" ry="3" fill="#000" opacity=".25"/><rect x="-6" y="-14" width="12" height="18" rx="5" fill="#fff" stroke="#005A9C" stroke-width="2"/><circle cy="-20" r="6" fill="#d9a17a"/><path d="M-7 -21 a7 7 0 0 1 14 0 h4 v2 h-18z" fill="#005A9C"/><path d="M-4 4 L-6 12 M4 4 L6 12" stroke="#bbb" stroke-width="3"/></g>`;}
+function outsSVG(n){let s='';for(let i=0;i<3;i++)s+=`<circle cx="${136+i*18}" cy="60" r="6.5" fill="${i<n?'#FF7A45':'none'}" stroke="#fff" stroke-width="2"/>`;return s;}
+// ================= STATE / STORAGE =================
+const STORE='smas.v1';
+let save={name:'',sound:true,stars:{}};
+try{const s=JSON.parse(localStorage.getItem(STORE)||'null');if(s&&typeof s==='object')save=Object.assign(save,s);}catch(e){}
+function persist(){try{localStorage.setItem(STORE,JSON.stringify(save));}catch(e){}}
+const ROUND=10;
+let S=null;
+// ================= SOUND (Web Audio; context created only after a user gesture) =================
+const Snd={ctx:null,
+  ensure(){if(!save.sound)return null;try{if(!this.ctx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;this.ctx=new AC();}if(this.ctx.state==='suspended')this.ctx.resume();}catch(e){return null;}return this.ctx;},
+  tone(f,t,d,type='sine',v=1,f2){const c=this.ensure();if(!c)return;const o=c.createOscillator(),g=c.createGain(),t0=c.currentTime+t;
+    o.type=type;o.frequency.setValueAtTime(f,t0);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t0+d);
+    g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(0.08*v,t0+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t0+d);
+    o.connect(g);g.connect(c.destination);o.start(t0);o.stop(t0+d+0.05);},
+  noise(t,d,v=1){const c=this.ensure();if(!c)return;const b=c.createBuffer(1,Math.floor(c.sampleRate*d),c.sampleRate),a=b.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=(Math.random()*2-1)*(1-i/a.length);
+    const s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();s.buffer=b;f.type='bandpass';f.frequency.value=1200;f.Q.value=.6;g.gain.value=0.04*v;
+    s.connect(f);f.connect(g);g.connect(c.destination);s.start(c.currentTime+t);},
+  tap(){this.tone(520,0,.07,'triangle',.5);},
+  good(){this.tone(660,0,.12,'triangle');this.tone(880,.1,.18,'triangle');},
+  bad(){this.tone(330,0,.18,'sine',.6,262);this.tone(262,.16,.22,'sine',.5,220);},
+  hit(){this.noise(0,.08,2);this.tone(900,0,.05,'square',.25);},
+  win(){[523,659,784,1047].forEach((f,i)=>this.tone(f,i*.12,.25,'triangle'));this.tone(1047,.5,.5,'triangle');this.noise(.3,1.4,1.2);},
+};
+// ================= UI =================
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const starsHTML=n=>[1,2,3].map(i=>`<span class="${i<=n?'on':'off'}">★</span>`).join('');
+function renderHome(){
+  const grid=$('grid');let h='';
+  WORLDS.forEach(w=>{const st=save.stars[w.g]||0,u='t'+w.g;
+    h+=`<button class="card" data-g="${w.g}" style="border-color:${w.color}" aria-label="${w.gname}: ${w.name}"><span class="pill" style="background:${w.color}">${w.g===0?'Grade K':w.gname}</span>
+    <div class="thumb" data-u="${u}">${sceneSVG(w,u)}</div>
+    <div class="info"><div class="wname" style="color:${w.dark}">${w.emoji} ${w.name}</div><div class="sport">${w.sub}</div><div class="stars">${starsHTML(st)}</div></div></button>`;});
+  const tot=Object.values(save.stars).reduce((a,b)=>a+b,0);
+  h+=`<button class="card player" id="playerCard"><div class="big">🏆</div><div class="pname">${save.name?esc(save.name):'All-Star Player'}</div><div style="font-size:30px">⭐ ${tot} / 21</div><small>Tap to set your name</small></button>`;
+  grid.innerHTML=h;
+  WORLDS.forEach(w=>{const u='t'+w.g,th=grid.querySelector(`[data-u="${u}"]`);placeAt(th,w,u,w.sport==='football'?.35:.45);
+    if(w.sport==='baseball'){th.querySelector('#'+u+'runners').innerHTML=runnerSVG(...bpt(1))+runnerSVG(...bpt(2))+runnerSVG(...bpt(0));th.querySelector('#'+u+'outs').innerHTML=outsSVG(1);th.querySelector('#'+u+'runs').textContent=w.g===3?'4':'2';}});
+  $('hello').textContent=save.name?`Hi, ${save.name}! Pick a grade and hit the field!`:'Pick a grade and hit the field!';
+  grid.querySelectorAll('.card[data-g]').forEach(b=>b.onclick=()=>{Snd.tap();startLevel(+b.dataset.g);});
+  $('playerCard').onclick=()=>{Snd.tap();openSettings();};
+  syncSound();
+}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===id));}
+function syncSound(){['homeSound','gameSound'].forEach(id=>{$(id).textContent=save.sound?'🔊':'🔇';});const t=$('sndToggle');t.textContent=save.sound?'On 🔊':'Off 🔇';t.classList.toggle('on',save.sound);}
+function toggleSound(){save.sound=!save.sound;persist();syncSound();if(save.sound)Snd.tap();}
+function tint(hex,a){const n=parseInt(hex.slice(1),16),r=n>>16,g=(n>>8)&255,b=n&255,m=c=>Math.round(c+(255-c)*a);return `rgb(${m(r)},${m(g)},${m(b)})`;}
+function startLevel(g){
+  const w=WORLDS[g];
+  S={g,w,idx:0,correct:0,results:[],streak:0,seen:new Set(),locked:false,u:'s'+(++UID),bases:[],runs:0,outs:0,inning:1};
+  const rs=document.documentElement.style;rs.setProperty('--accent',w.color);rs.setProperty('--accent-dark',w.dark);
+  $('gWorld').textContent=`${w.emoji} ${w.name}`;$('gGrade').textContent=`${w.g===0?'Kindergarten':w.gname} · ${w.sub}`;
+  $('game').style.background=`linear-gradient(180deg,${tint(w.color,.85)},${tint(w.color,.68)})`;
+  document.querySelector('.qcard').dataset.icon=w.emoji;$('scene').innerHTML=sceneSVG(w,S.u);placeAt($('scene'),w,S.u,0);
+  if(w.sport==='baseball')drawBases(false);
+  $('sheet').classList.remove('show');$('winOv').classList.remove('show');stopConfetti();
+  show('game');nextProblem();
+}
+function sceneLabel(){const w=S.w,i=Math.min(S.idx,ROUND);
+  if(w.sport==='football'){const yd=20+8*i;return yd>=100?'🏈 TOUCHDOWN!':`🏈 Ball on the ${yd<=50?'Trojans':'opponent'} ${yd<=50?yd:100-yd}-yard line · ${w.label}`;}
+  if(w.sport==='baseball')return `⚾ At-bat ${Math.min(i+1,ROUND)} of ${ROUND} · ${w.label}`;
+  if(w.sport==='ski'){const t=i/ROUND;return t<.34?'🟢 Green circle · Top of the mountain':t<.67?'🟦 Blue square · Mid-mountain':'◆ Black diamond · Almost to the lodge!';}
+  return `🌊 Waves caught: ${S.correct} · ${w.label}`;}
+function renderDots(){let h='';for(let i=0;i<ROUND;i++){const r=S.results[i];h+=`<span class="dot ${r===true?'ok':r===false?'miss':i===S.idx?'cur':''}"></span>`;}$('dots').innerHTML=h;}
+function nextProblem(){
+  let p,tries=0;do{p=genProblem(S.g);tries++;}while(S.seen.has(p.prompt+p.visual)&&tries<20);
+  S.seen.add(p.prompt+p.visual);S.problem=p;S.locked=false;
+  $('qtag').textContent=`Question ${S.idx+1} of ${ROUND}`;
+  const pr=$('prompt');pr.innerHTML=p.prompt;pr.classList.toggle('long',!!p.long);pr.classList.toggle('big',!p.long&&!p.visual);
+  $('visual').innerHTML=p.visual;
+  const A=$('answers');A.className='answers'+(p.choices.length===3?' three':p.choices.length===2?' two':'');
+  const longest=Math.max(...p.choices.map(c=>c.html.replace(/<span class="unit">.*?<\/span>/g,'').replace(/<[^>]+>/g,'').length));
+  A.innerHTML=p.choices.map(c=>`<button class="ans${longest>8?' small':''}" data-k="${esc(c.key)}">${c.html}</button>`).join('');
+  A.querySelectorAll('.ans').forEach(b=>b.onclick=()=>answer(b));
+  renderDots();$('sceneLabel').textContent=sceneLabel();
+}
+function answer(btn){
+  if(!S||S.locked)return;S.locked=true;
+  const ok=btn.dataset.k===S.problem.answer;
+  S.results[S.idx]=ok;
+  const btns=[...$('answers').querySelectorAll('.ans')];btns.forEach(b=>b.disabled=true);
+  const last=S.idx===ROUND-1;
+  if(ok){S.correct++;S.streak++;btn.classList.add('right');btns.forEach(b=>{if(b!==btn)b.classList.add('dim');});Snd.good();
+    toast(advanceScene(true,last));renderDots();S.timer=setTimeout(proceed,1350);}
+  else{S.streak=0;btn.classList.add('wrong');btns.forEach(b=>{if(b.dataset.k===S.problem.answer)b.classList.add('right');else if(b!==btn)b.classList.add('dim');});Snd.bad();
+    toast(advanceScene(false,last),'#FFD0B8');renderDots();
+    $('coach').textContent=pick(['💪','🙂','🤙','⭐','👍']);
+    $('sheetH').textContent=pick(['Nice try!','Almost!','Good effort!','So close!','Keep going!']);
+    $('sheetA').innerHTML=`The answer is <b>${S.problem.answerHTML}</b>`;$('sheetHint').innerHTML='💡 '+S.problem.hint;
+    S.timer=setTimeout(()=>$('sheet').classList.add('show'),450);}
+}
+function proceed(){if(!S)return;clearTimeout(S.timer);$('sheet').classList.remove('show');S.idx++;if(S.idx>=ROUND)finish();else nextProblem();}
+function toast(t,color){const el=$('toast');el.textContent=t;el.style.color=color||'#fff';el.classList.remove('show');void el.offsetWidth;el.classList.add('show');}
+function advanceScene(ok,last){
+  const w=S.w,t0=S.idx/ROUND,t1=(S.idx+1)/ROUND,root=$('scene'),u=S.u;
+  if(w.sport==='baseball')return baseballPlay(ok,last);
+  tween(900,e=>placeAt(root,w,u,t0+(t1-t0)*e));
+  S.idx++;$('sceneLabel').textContent=sceneLabel();S.idx--;
+  if(w.sport==='football'){if(last)return 'TOUCHDOWN! 🏈';return ok?(S.streak>=3?'Big play! 🔥':pick(w.good)):'Short gain — keep driving!';}
+  if(last)return w.sport==='ski'?'Made it to the lodge! 🏔️':'Rode it to shore! 🌊';
+  return ok?pick(w.good):w.bad;
+}
+function drawBases(anim,moves,done){
+  const root=$('scene'),u=S.u,g=root.querySelector('#'+u+'runners');
+  root.querySelector('#'+u+'runs').textContent=S.runs;root.querySelector('#'+u+'inn').textContent=S.inning;root.querySelector('#'+u+'outs').innerHTML=outsSVG(S.outs);
+  if(!anim){g.innerHTML=S.bases.map(p=>runnerSVG(...bpt(p))).join('')+runnerSVG(...bpt(0));return;}
+  tween(1000,e=>{g.innerHTML=moves.map(([a,b])=>{const p=a+(b-a)*e;return p>=4&&e>=1?'':runnerSVG(...bpt(p));}).join('');},done);
+}
+function baseballPlay(ok,last){
+  const root=$('scene'),u=S.u;
+  S.idx++;$('sceneLabel').textContent=sceneLabel();S.idx--;
+  if(!ok){S.outs++;let msg='Strike three — shake it off!';
+    if(S.outs>=3){S.outs=0;S.inning++;S.bases=[];msg='New inning — you got this!';}
+    setTimeout(()=>drawBases(false),500);return msg;}
+  Snd.hit();
+  const n=last?4:S.streak>=4?(Math.random()<.5?4:3):S.streak===3?2:S.streak===2?pick([1,2]):1;
+  const moves=S.bases.map(p=>[p,p+n]).concat([[0,n]]);
+  const scored=moves.filter(m=>m[1]>=4).length;
+  const ball=root.querySelector('#'+u+'ball');ball.setAttribute('opacity',1);
+  const tx=pick([250,420,580,760]),ty=n===4?30:n>=2?70:118;
+  tween(700,e=>{ball.setAttribute('cx',500+(tx-500)*e);ball.setAttribute('cy',188+(ty-188)*e-Math.sin(e*Math.PI)*(n===4?120:50));},()=>ball.setAttribute('opacity',0));
+  drawBases(true,moves,()=>{S.bases=moves.filter(m=>m[1]<4).map(m=>m[1]);S.runs+=scored;drawBases(false);});
+  const names={1:'Base hit! Single!',2:'Double! ⚾',3:'Triple! 💨',4:'HOME RUN! 💙'};
+  return names[n]+(scored&&n<4?` +${scored} run${scored>1?'s':''}`:'');
+}
+function starSVG(on){return `<svg viewBox="0 0 100 100"><path d="M50 6l13 28 30 3-23 20 7 31-27-16-27 16 7-31-23-20 30-3z" fill="${on?'#FFC400':'#dfe5ee'}" stroke="${on?'#c77f00':'#b8c2d0'}" stroke-width="5" stroke-linejoin="round"/>${on?'<path d="M37 33 l9-2" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".8"/>':''}</svg>`;}
+function finish(){
+  const w=S.w,c=S.correct,stars=c>=9?3:c>=7?2:1;
+  save.stars[w.g]=Math.max(save.stars[w.g]||0,stars);persist();
+  $('winHead').style.background=`linear-gradient(135deg,${w.color},${w.dark})`;
+  $('winHead').style.color=w.sport==='football'?'#FFCC00':'#fff';
+  $('winTitle').textContent=w.win;$('winSub').textContent=w.winSub;
+  $('winStars').innerHTML=[1,2,3].map(i=>starSVG(i<=stars)).join('');
+  $('winScore').innerHTML=`${save.name?esc(save.name)+', you':'You'} got <b style="color:${w.color}">${c} of ${ROUND}</b> right!`;
+  $('winMsg').textContent=stars===3?'All-Star performance! 🌟':stars===2?'Great game! Play again to earn 3 stars!':'Good hustle! Practice makes champions!';
+  $('nextLvlBtn').style.display=w.g<6?'':'none';
+  $('winOv').classList.add('show');Snd.win();confetti(w.conf);
+}
+let confT=null;
+function confetti(colors){
+  const cv=$('confetti'),ctx=cv.getContext('2d'),dpr=Math.min(2,window.devicePixelRatio||1),W=innerWidth,H=innerHeight;
+  cv.style.display='block';cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+  const P=Array.from({length:170},()=>({x:Math.random()*W,y:-20-Math.random()*H*.7,vx:(Math.random()-.5)*3,vy:2+Math.random()*3.5,r:Math.random()*6.28,vr:(Math.random()-.5)*.3,s:8+Math.random()*9,c:pick(colors),sh:Math.random()<.3}));
+  const t0=performance.now();cancelAnimationFrame(confT);
+  const f=now=>{ctx.clearRect(0,0,W,H);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;p.vy+=.02;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.fillStyle=p.c;ctx.strokeStyle='rgba(0,0,0,.15)';
+    if(p.sh){ctx.beginPath();ctx.arc(0,0,p.s/2.4,0,6.28);ctx.fill();ctx.stroke();}else{ctx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);ctx.strokeRect(-p.s/2,-p.s/4,p.s,p.s/2);}ctx.restore();});
+    if(now-t0<5500)confT=requestAnimationFrame(f);else cv.style.display='none';};
+  confT=requestAnimationFrame(f);
+}
+function stopConfetti(){cancelAnimationFrame(confT);$('confetti').style.display='none';}
+function openSettings(){$('nameIn').value=save.name||'';syncSound();$('resetBtn').textContent='Reset progress';$('setOv').classList.add('show');}
+function closeSettings(){save.name=$('nameIn').value.trim().slice(0,14);persist();$('setOv').classList.remove('show');$('nameIn').blur();renderHome();}
+let resetArm=null;
+$('resetBtn').onclick=()=>{const b=$('resetBtn');if(!resetArm){b.textContent='Tap again to confirm';resetArm=setTimeout(()=>{resetArm=null;b.textContent='Reset progress';},3000);}
+  else{clearTimeout(resetArm);resetArm=null;save.stars={};persist();b.textContent='Progress cleared ✓';renderHome();}};
+$('openSettings').onclick=()=>{Snd.tap();openSettings();};
+$('closeSet').onclick=()=>{Snd.tap();closeSettings();};
+$('setOv').addEventListener('click',e=>{if(e.target.id==='setOv')closeSettings();});
+$('nameIn').addEventListener('keydown',e=>{if(e.key==='Enter')closeSettings();});
+$('sndToggle').onclick=toggleSound;$('homeSound').onclick=toggleSound;$('gameSound').onclick=toggleSound;
+$('goHome').onclick=()=>{Snd.tap();if(S){clearTimeout(S.timer);S.locked=true;}$('sheet').classList.remove('show');renderHome();show('home');};
+$('nextBtn').onclick=()=>{Snd.tap();proceed();};
+$('againBtn').onclick=()=>startLevel(S.g);
+$('nextLvlBtn').onclick=()=>startLevel(Math.min(6,S.g+1));
+$('winHome').onclick=()=>{stopConfetti();$('winOv').classList.remove('show');renderHome();show('home');};
+// iOS: unlock audio on first gesture; block pinch & double-tap zoom and long-press menus
+document.addEventListener('pointerdown',()=>{if(save.sound)Snd.ensure();},{passive:true});
+document.addEventListener('touchend',()=>{if(save.sound)Snd.ensure();},{passive:true});
+['gesturestart','gesturechange'].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault()));
+let lastTouch=0;document.addEventListener('touchend',e=>{const n=Date.now(),inp=e.target.closest&&e.target.closest('input');if(n-lastTouch<320&&!inp){e.preventDefault();if(e.target.closest){const b=e.target.closest('button');if(b)b.click();}}lastTouch=n;},{passive:false});
+document.addEventListener('contextmenu',e=>{if(!(e.target.closest&&e.target.closest('input')))e.preventDefault();});
+// Apple touch icon as PNG (generated at runtime)
+(function(){try{const c=document.createElement('canvas');c.width=c.height=180;const x=c.getContext('2d');const g=x.createLinearGradient(0,0,0,180);g.addColorStop(0,'#0B8CFF');g.addColorStop(1,'#005A9C');x.fillStyle=g;x.fillRect(0,0,180,180);
+  x.beginPath();for(let i=0;i<10;i++){const r=i%2?30:70,a=-Math.PI/2+i*Math.PI/5;x.lineTo(90+r*Math.cos(a),96+r*Math.sin(a));}x.closePath();x.fillStyle='#FFCC00';x.fill();x.lineWidth=7;x.strokeStyle='#990000';x.lineJoin='round';x.stroke();
+  x.fillStyle='#990000';x.font='900 52px Arial';x.textAlign='center';x.textBaseline='middle';x.fillText('+',90,100);$('appleIcon').href=c.toDataURL('image/png');}catch(e){}})();
+// Test/debug hook
+window.SMG={WORLDS,genProblem,startLevel,state:()=>S,
+  answerCorrect(){const b=[...document.querySelectorAll('#answers .ans')].find(b=>b.dataset.k===S.problem.answer);if(b)b.click();return !!b;},
+  answerWrong(){const b=[...document.querySelectorAll('#answers .ans')].find(b=>b.dataset.k!==S.problem.answer);if(b)b.click();return !!b;},next:()=>proceed()};
+renderHome();
+</script>
+</body>
+</html>
